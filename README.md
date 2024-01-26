@@ -25,9 +25,10 @@ install.packages(c("rtf"), repos = "http://cran.r-project.org").
 install.packages(c("parallel","data.table","ggplot2","dplyr", "ARTool", "lubridate", "kableExtra","caret","hrbrthemes", "modeest")).
 devtools::install_github("kassambara/ggpubr").
 For Robust Analysis:
-install.packages("WRS2").
 Source Rand Wilcox Robust Analysis Code from https://dornsife.usc.edu/labs/rwilcox/software/.
-This program uses the version: source("Rallfun-v37.txt")
+This program uses the version: source("Rallfun-v40vMM.txt"), 
+that corresponds to the version Rallfun-v40.txt with a few improvements
+Adapted functions include the suffix "_vMM"
 
 Authors.
 Manuel-Miguel Ramos-Álvarez (mramos@ujaen.es) - collaborator, Muzzio Lab -.
