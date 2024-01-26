@@ -3,8 +3,9 @@
 Muzzio Lab Neuroscience Analysis -2
 
 This is a set of statistical analysis codes written in R.
-It is oriented for the robust analysis of experimental designs,
-including on-way, two-way & three-way, between and Mixed.
+It is oriented to the analysis of experimental designs, both parametric ANOVA and Robust ANOVA,
+including on-way, two-way, three-way, and four-way between and within.
+On the other hand, Bayesian statistics and modeling-based analysis are also implemented.
 
 The data is included in the folder "NeuroSpatialData".
 
