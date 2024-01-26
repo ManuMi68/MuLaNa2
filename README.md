@@ -16,7 +16,7 @@ Alternatively the code is also included in the RStudio file:
 The complete code is included for the analysis of all the data of the paper
 "Distinct neural mechanisms for heading retrieval and context recognition in the hippocampus during spatial reorientation".
 The code can be copied from the different chunks, organized from the Figures on the paper.
-As the code executes, the results (files with anovas and graphics) are stored in the folder "Design_Sleep3",
+As the code executes, the results (files with anovas and graphics) are stored in the folder "NeuroSpatial",
 while they are displayed in the output window.
 
 Once in the R program, install the libraries:
