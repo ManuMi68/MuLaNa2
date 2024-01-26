@@ -1,4 +1,4 @@
-"";"Subject";"Day";"Side";"Context";"Proportion"
+"";"Subject";"Day";"Axis";"Context";"Proportion"
 "1";"1";"Day 1";"Long Wall Left";"Context A";0
 "2";"1";"Day 1";"Long Wall Left";"Context B";100
 "3";"1";"Day 1";"Long Wall Right";"Context A";100
