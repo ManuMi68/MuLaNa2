@@ -6,16 +6,15 @@ This is a set of statistical analysis codes written in R.
 It is oriented for the robust analysis of experimental designs,
 including on-way, two-way & three-way, between and Mixed.
 
-The data is included in the folder "Design_Sleep3".
+The data is included in the folder "NeuroSpatialData".
 
 The code is organized in an html file that includes all the explanations and details:
-"Differentia-Sleep-Deprivation-Place-Cell-Young-Old-Mice.html".
+"NeuralSpatial.html".
 Alternatively the code is also included in the RStudio file:
-"Differentia Sleep Deprivation Place Cell Young Old Mice.Rmd".
+"NeuralSpatial.Rmd".
 
 The complete code is included for the analysis of all the data of the paper
-"Differentia effect of sleep deprivation on place cell representations,
-sleep architecture, and memory in young and old mice".
+"Distinct neural mechanisms for heading retrieval and context recognition in the hippocampus during spatial reorientation".
 The code can be copied from the different chunks, organized from the Figures on the paper.
 As the code executes, the results (files with anovas and graphics) are stored in the folder "Design_Sleep3",
 while they are displayed in the output window.
@@ -35,4 +34,4 @@ Manuel-Miguel Ramos-Álvarez (mramos@ujaen.es) - collaborator, Muzzio Lab -.
 See also the list of contributors who participated in this project.
 
 License.
-This project is PRIVATE to Muzzio Lab members. All Rights Reserved 2021.
+This project is PRIVATE to Muzzio Lab members. All Rights Reserved 2024.
