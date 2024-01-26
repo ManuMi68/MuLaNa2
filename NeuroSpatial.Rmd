@@ -1,0 +1,212 @@
+---
+title: "NeuralSpatial: Statistics for Distinct neural mechanisms for heading retrieval and context recognition in the hippocampus during spatial reorientation"
+author: "Manuel Miguel Ramos Álvarez and the Muzzio Lab"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+format:
+  html:
+    toc: true
+    toc-location: left
+    toc-depth: 3
+    number-sections: true
+    code-fold: true
+    code-tools: true
+    code-summary: "Code"
+    code-overflow: scroll
+    theme: united
+    page-layout: full
+    grid:
+      sidebar-width: 250px
+      body-width: 900px
+      margin-width: 300px
+      gutter-width: 1.5rem
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+# Preliminars: Packages, functions, and data preload
+
+```{r, warning=FALSE, message=FALSE}
+
+source("https://github.com/ManuMi68/StatMmRa/raw/main/RMmRaGen24.txt")
+source("https://github.com/ManuMi68/MuLaNa2/raw/main/Rallfun-v40vMM.txt")
+
+
+# Function chkPkg() is located in RMmRaGen.R
+chkPkg(c("data.table", "dplyr", "tidyr","tibble", "parallel", "foreach",
+          "ggplot2","add2ggplot","introdataviz", "cowplot", "ggridges", "ggcorrplot",
+          "ez","afex", "emmeans", "effectsize","scmamp",
+          "rtf","mltools","apaTables",
+          "nparLD", "nparcomp", "rankFD",
+          "XNomial", "rstatix","EMT", "twosamples"))
+
+FxDir="/Volumes/RMmRa21/ADMmRa/ANOVA"
+setwd(FxDir)
+DirPath<-"Results"
+if (!dir.exists(paste0(FxDir,"/",DirPath))) {dir.create(paste0(FxDir,"/",DirPath))}
+
+# Color schemes for the 4 tasks
+# Tarea 1 (código 2 "Elevated Cliff")
+TskCol1<-c("green3","green4")
+TskCol2<-c("red","orange")
+TskCol3<-c("blue","dodgerblue")
+TskCol4<-c("gray28","gray50")
+
+TskCol1b<-c("red","orange","brown")
+
+
+# More specific functions, perhaps I will include them in RMMRA
+PosHocAut <-function(a0P, MxP, emP, OrdV,customP) {
+      em.simple.Global <- eval(parse(text = paste0("emmeans(a0P, ~ ", emP,")")))
+      dtresAllGlobal<- setkeyv(as.data.table(em.simple.Global),OrdV)
+      dtresAllGlobal[,`:=`(emmean=frmMM(emmean),SE=frmMM(SE,4),lower.CL=frmMM(lower.CL),upper.CL=frmMM(upper.CL))]
+      ResPostH.Global<-pairs(em.simple.Global,adjust = "holm")
+      ResPostH.GlobalOrto<-contrast(em.simple.Global, customP,adjust = "holm")
+      ResPostH.Global.MM <-PosHoc.MM(em.simple.Global)     # Estimate Rom from emmeans
+      em.Is<-em.r<-NA
+      em.Is<- eval(parse(text = paste0("emmeans(a0P, ~ ", emP,",pbkrtest.limit = 18240)")))
+      em.r<-  eval(parse(text = paste0("emmeans(MxP, ~ ", emP,",pbkrtest.limit = 18240)")))
+      ResPosHAPA.Global <- ResAPA2.23(em.Is, em.r, MxP)
+      Result<-list(
+        Global=      em.simple.Global,
+        Means=       dtresAllGlobal,
+        PosHoc=      ResPostH.Global,
+        PosHocPlan = ResPostH.GlobalOrto,
+        PosHocMM =   ResPostH.Global.MM,
+        PosHocAPA =  ResPosHAPA.Global
+  )
+    }
+    
+ResAPA2.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
+      pp1 =    pairs(em.simpleIsP,adjust = "holm")
+      pp1Sum = summary(pp1)
+      pp1.MM = PosHoc.MM(em.simpleIsP)
+      pp1.r =  pairs(em.simple.rP,adjust = "holm")
+      pp1b=    eff_size(em.simple.rP, sigma = sigma(Mod.1rp), edf = df.residual(Mod.1rp))
+      pp1bSum= summary(pp1b)
+      initEs=grep("estimate",names(data.table(pp1Sum)))-1
+      
+      ResAPA2<-list();#CtrEl=1
+      for (CtrEl in 1:nrow(pp1Sum)) {
+        ResAPA2[CtrEl]<- paste0(paste(unname(unlist((pp1Sum)[CtrEl,2:initEs])),collapse = " "),": ",pp1Sum[CtrEl,1],": ",
+                                "t(",formatC(round(pp1Sum[CtrEl,"df"],2),2,format="f"),") = ",
+                                formatC(round(pp1Sum[CtrEl,"t.ratio"],2),2,format="f"), ", p = ",
+                                # formatC(round(pp1Sum[CtrEl,"p.value"],4),4,format="f"), ", dPAIR = ",
+                                pp1.MM[CtrEl,pRom], ", dPAIR = ",  
+                                formatC(round(pp1bSum[CtrEl,"effect.size"],2),2,format="f"),
+                                " (", InterpdCohen(pp1bSum[CtrEl,"effect.size"])," effect)",
+                                ", CI 95% = [",
+                                formatC(round(pp1bSum[CtrEl,"lower.CL"],2),2,format="f"), ", ",
+                                formatC(round(pp1bSum[CtrEl,"upper.CL"],2),2,format="f"), "]"
+        )}
+      ResAPA2
+    }
+
+```
+
+```{r ResCtrl1, eval=F, echo=FALSE}
+    # Results
+    str(DTp) # Data File
+    kableTabl(DTp,"Data", "")
+    kableTabl(ezPrecis(DTp),"Design Structure", "")
+    plot(Grp) # Exploratory Analysis
+    kableTabl(DTRes,"Descriptive", "")
+    cat("Omnibus AOV")
+    a0
+    cat("Pos Hoc Simple Effects")
+    PosH.4w$PosHocMM
+    #kableTabl(PosH.4w$PosHocMM,"Pos Hoc Simple Effects", "")
+    kableTabl(PosH.4w$Means,"Descrptive & CI-95%", "")
+    
+```
+
+# **Figure 1. Reorientation behavior in a two-context paradigm**
+
+------------------------------------------------------------------------
+
+> **Figure 1.** Reorientation behavior in a two-context paradigm. A) Schematic of experimental chambers showing reward location (yellow star) in Context A (left) and Context B (right). B) Schematic of session structure of two-context paradigm. Animals (N = 14) are disoriented before being placed in each context, in alternating order on 12 consecutive trials. C) Percentage of digs in each cup location on test trials on day 1 (left), day 2 (center), and day 3 (right). D) Boxplots showing distribution of digs in geometrically correct vs. incorrect axes in each context. E) Boxplots showing distribution of digs in each cup location combining both contexts. In all boxplots graphs, the boxes indicate the upper and lower quartiles of the data and the whiskers (extending lines) the minimum and maximum outside the quartiles. The horizontal line indicates the median. Dots represent individual data points and asterisks (\*) indicate p \< 0.05. F) Cumulative proportion of Bayes Factor (BF) on days 1 to 3 per context evaluating the alternative model (MAlt) that animals preferentially dug on a distinct rewarded axis in each context vs. the null model (Mnull) that animals dug by chance. G) Cumulative proportion of individual Bayes Factors (BF) across days 1 to 3 combining contexts evaluating the alternative model (MAlt) that animals increased digging in C locations with experience vs. the null model (Mnull) that animals dug by chance Conventional values showing the border marking credibility for Malt (log(BF) \> log(1/3)= 1.1) and Mnull (log(BF) \< log(1/3)= -1.1) are indicated by vertical dashed lines. The value of half (0.5) of the sample is marked by a horizontal dashed line.
+
+------------------------------------------------------------------------
+
+## Fig 1D) Boxplots showing distribution of digs in geometrically correct vs. incorrect axes in each context {Design (2 Location x S) x (3 Day x S) x (2 Context x S)}
+
+```{r F1D,}
+
+  DT1 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/BehavTwoContext.RDS")))
+  DTp<-copy(DT1)
+  
+  
+# Box Plot
+  ColPer=c("#D599D7", "#AA33B0","#700075")
+  Grp<- Grph.2023(
+      DatP = DTp,
+        Dvp="Proportion", VarX="Context",VarFill="Day",
+        LblsP =c("Cluster Quality", "","Dig Percent Per Animal",""),
+        ylmP =c(0,100),hLin = F,lvIp = 4,GrpSel = c(1:3),wMain=F,
+      TyGrp="Box", # Bar, Box, Violin, SplitViolin
+      Wthdot=T, Relleno=T, ResumAd=T,ColPer=ColPer
+    ) 
+   Grp <- Grp + facet_grid( ~ Axis)
+   
+   
+# Descriptive
+  DTRes<-DTp[,c(N = .N,as.list(summary(Proportion))), by=.(Axis,Day,Context)]
+  write.csv2(DTRes,"BehavTwoContext_Descriptive.csv")
+ 
+# AOV
+  a0 <- aov_ez("Subject", "Proportion", DTp,
+        within = c("Axis","Context","Day"))
+  
+  # Effect size & Mixed
+  eef<-effectsize::eta_squared(a0, generalized=TRUE)
+  Mod.1r<-lmer(Proportion~Day * Axis * Context + (1|Subject),data=DTp)
+  
+  # Pos Hoc of the more complex significant effect: Axis:Context
+  # Defines orthogonal contrasts from a prioristic perspective
+  custom <- list(`Unique` = c(1, -1))
+  PosH.4w = PosHocAut(a0, Mod.1r, "Axis|Context", c("Context","emmean"), custom=custom)
+  # Since the focal variable has only two levels, the Rom correction is not necessary  
+  
+  <<ResCtrl1>>
+```
+
+## Fig 1E) Boxplots showing distribution of digs in each cup location combining both contexts {Design (4 Dig x S) x (3 Day x S)}
+
+```{r F1E, }
+
+  DT2 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/DigBehavioralData.RDS")))
+  DTp<-copy(DT2)
+  
+# Box Plot
+  ColPer=c("#D599D7", "#AA33B0","#700075")
+  Grp1<- Grph.2023(
+    DatP = DTp,
+    Dvp="Perc", VarX="Dig", VarFill="Day",
+    LblsP =c("Cluster Quality", "","Dig Percent Per Animal","Location of first dig"),
+    ylmP =c(0,100),hLin = F,lvIp = 4,GrpSel = c(1:3),wMain=F,
+    TyGrp="Box", # Bar, Box, Violin, SplitViolin
+    Wthdot=T, Relleno=T, ResumAd=T,ColPer=ColPer
+  )
+  
+# Descriptive
+  DTRes<-DTp[,c(N = .N,as.list(summary(Perc))), by=.(Dig,Day)]
+  write.csv2(DTRes,"DigBehavioralData_Descriptive.csv")
+ 
+# AOV
+  a0 <- aov_ez("Subject", "Perc", DTp,
+        within = c("Dig","Day"))
+  
+  # Effect size & Mixed
+  eef<-effectsize::eta_squared(a0, generalized=TRUE)
+  Mod.1r<-lmer(Perc~Day * Dig + (1|Subject),data=DTp)
+    
+  
+# Pos Hoc
+  # Defines orthogonal contrasts from a prioristic perspective
+  custom <- list(`CG vs NF` = c(1, 1,-1,-1),
+                     `C vs G` = c(1,-1, 0, 0),
+                    `N vs F` = c(0, 0, 1,-1)
+                 )
+  PosH.4w = PosHocAut(a0, Mod.1r, "Dig|Day", c("Day","emmean"), custom=custom)
+  <<ResCtrl1>> 
+```
