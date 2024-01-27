@@ -1,0 +1,85 @@
+"";"Group";"Subj";"Day";"AxisMM";"z";"Perc";"N";"Inter";"BF";"InterBF";"logBF";"ecdfr"
+"1";"Context A";"AK42";"Session 1";"C/G";2;1;2;"Context A.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"2";"Context A";"AK74";"Session 1";"C/G";1;0,5;2;"Context A.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,428571428571429
+"3";"Context A";"CMG087";"Session 1";"C/G";2;1;2;"Context A.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"4";"Context A";"CMG089";"Session 1";"C/G";1;0,5;2;"Context A.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,428571428571429
+"5";"Context A";"CMG129";"Session 1";"C/G";2;1;2;"Context A.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"6";"Context A";"CMG154";"Session 1";"C/G";2;1;2;"Context A.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"7";"Context A";"CMG159";"Session 1";"C/G";1;0,5;2;"Context A.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,428571428571429
+"8";"Context A";"CMG161";"Session 1";"C/G";2;1;2;"Context A.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"9";"Context A";"CMG162";"Session 1";"C/G";1;0,5;2;"Context A.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,428571428571429
+"10";"Context A";"CMG169";"Session 1";"C/G";1;0,5;2;"Context A.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,428571428571429
+"11";"Context A";"HG1";"Session 1";"C/G";2;1;2;"Context A.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"12";"Context A";"JJ9";"Session 1";"C/G";1;0,5;2;"Context A.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,428571428571429
+"13";"Context A";"K1";"Session 1";"C/G";2;1;2;"Context A.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"14";"Context A";"MG1";"Session 1";"C/G";2;1;2;"Context A.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"15";"Context A";"AK42";"Session 2";"C/G";4;0,666666666666667;6;"Context A.Session 2";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,428571428571429
+"16";"Context A";"AK74";"Session 2";"C/G";3;0,5;6;"Context A.Session 2";0,568310857142857;"Contray Anecdotal/Weak";-0,565086726263879;0,142857142857143
+"17";"Context A";"CMG087";"Session 2";"C/G";3;0,75;4;"Context A.Session 2";1,46208;"Anecdotal/Weak";0,37986007939277;0,5
+"18";"Context A";"CMG089";"Session 2";"C/G";5;0,833333333333333;6;"Context A.Session 2";3,00116419047619;"Moderate/Positive";1,09900027688301;0,928571428571429
+"19";"Context A";"CMG129";"Session 2";"C/G";2;0,5;4;"Context A.Session 2";0,655253333333333;"Contray Anecdotal/Weak";-0,422733349674684;0,285714285714286
+"20";"Context A";"CMG154";"Session 2";"C/G";3;1;3;"Context A.Session 2";2,968;"Anecdotal/Weak";1,08788832530513;0,785714285714286
+"21";"Context A";"CMG159";"Session 2";"C/G";4;0,8;5;"Context A.Session 2";2,07029333333333;"Anecdotal/Weak";0,727690304162116;0,571428571428571
+"22";"Context A";"CMG161";"Session 2";"C/G";2;0,5;4;"Context A.Session 2";0,655253333333333;"Contray Anecdotal/Weak";-0,422733349674684;0,285714285714286
+"23";"Context A";"CMG162";"Session 2";"C/G";4;0,666666666666667;6;"Context A.Session 2";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,428571428571429
+"24";"Context A";"CMG169";"Session 2";"C/G";3;1;3;"Context A.Session 2";2,968;"Anecdotal/Weak";1,08788832530513;0,785714285714286
+"25";"Context A";"HG1";"Session 2";"C/G";3;1;3;"Context A.Session 2";2,968;"Anecdotal/Weak";1,08788832530513;0,785714285714286
+"26";"Context A";"JJ9";"Session 2";"C/G";3;0,5;6;"Context A.Session 2";0,568310857142857;"Contray Anecdotal/Weak";-0,565086726263879;0,142857142857143
+"27";"Context A";"K1";"Session 2";"C/G";5;0,833333333333333;6;"Context A.Session 2";3,00116419047619;"Moderate/Positive";1,09900027688301;0,928571428571429
+"28";"Context A";"MG1";"Session 2";"C/G";6;1;6;"Context A.Session 2";10,7539291428571;"Strong/Positive";2,37527118945534;1
+"29";"Context A";"AK42";"Session 3";"C/G";4;0,666666666666667;6;"Context A.Session 3";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,571428571428571
+"30";"Context A";"AK74";"Session 3";"C/G";6;1;6;"Context A.Session 3";10,7539291428571;"Strong/Positive";2,37527118945534;1
+"31";"Context A";"CMG087";"Session 3";"C/G";3;0,5;6;"Context A.Session 3";0,568310857142857;"Contray Anecdotal/Weak";-0,565086726263879;0,214285714285714
+"32";"Context A";"CMG089";"Session 3";"C/G";3;0,6;5;"Context A.Session 3";0,853866666666667;"Contray Anecdotal/Weak";-0,157980225407796;0,357142857142857
+"33";"Context A";"CMG129";"Session 3";"C/G";4;0,666666666666667;6;"Context A.Session 3";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,571428571428571
+"34";"Context A";"CMG154";"Session 3";"C/G";2;0,5;4;"Context A.Session 3";0,655253333333333;"Contray Anecdotal/Weak";-0,422733349674684;0,285714285714286
+"35";"Context A";"CMG159";"Session 3";"C/G";4;0,666666666666667;6;"Context A.Session 3";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,571428571428571
+"36";"Context A";"CMG161";"Session 3";"C/G";2;0,333333333333333;6;"Context A.Session 3";0,344969142857143;"Contray Anecdotal/Weak";-1,06430030694465;0,0714285714285714
+"37";"Context A";"CMG162";"Session 3";"C/G";5;0,833333333333333;6;"Context A.Session 3";3,00116419047619;"Moderate/Positive";1,09900027688301;0,785714285714286
+"38";"Context A";"CMG169";"Session 3";"C/G";2;0,4;5;"Context A.Session 3";0,45664;"Contray Anecdotal/Weak";-0,783859944693665;0,142857142857143
+"39";"Context A";"HG1";"Session 3";"C/G";4;1;4;"Context A.Session 3";4,47392;"Moderate/Positive";1,49826498181732;0,857142857142857
+"40";"Context A";"JJ9";"Session 3";"C/G";5;0,833333333333333;6;"Context A.Session 3";3,00116419047619;"Moderate/Positive";1,09900027688301;0,785714285714286
+"41";"Context A";"K1";"Session 3";"C/G";5;0,833333333333333;6;"Context A.Session 3";3,00116419047619;"Moderate/Positive";1,09900027688301;0,785714285714286
+"42";"Context A";"MG1";"Session 3";"C/G";6;1;6;"Context A.Session 3";10,7539291428571;"Strong/Positive";2,37527118945534;1
+"43";"Context B";"AK42";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"44";"Context B";"AK74";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"45";"Context B";"CMG087";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"46";"Context B";"CMG089";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"47";"Context B";"CMG129";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"48";"Context B";"CMG154";"Session 1";"C/G";0;0;1;"Context B.Session 1";0,6;"Contray Anecdotal/Weak";-0,51082562376599;0,142857142857143
+"49";"Context B";"CMG159";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"50";"Context B";"CMG161";"Session 1";"C/G";1;0,5;2;"Context B.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,357142857142857
+"51";"Context B";"CMG162";"Session 1";"C/G";1;0,5;2;"Context B.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,357142857142857
+"52";"Context B";"CMG169";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"53";"Context B";"HG1";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"54";"Context B";"JJ9";"Session 1";"C/G";0;0;2;"Context B.Session 1";0,413333333333334;"Contray Anecdotal/Weak";-0,883500909051164;0,0714285714285714
+"55";"Context B";"K1";"Session 1";"C/G";1;0,5;2;"Context B.Session 1";0,786666666666667;"Contray Anecdotal/Weak";-0,239950669630591;0,357142857142857
+"56";"Context B";"MG1";"Session 1";"C/G";2;1;2;"Context B.Session 1";2,01333333333333;"Anecdotal/Weak";0,699791723278614;1
+"57";"Context B";"AK42";"Session 2";"C/G";3;0,5;6;"Context B.Session 2";0,568310857142857;"Contray Anecdotal/Weak";-0,565086726263879;0,0714285714285714
+"58";"Context B";"AK74";"Session 2";"C/G";5;0,833333333333333;6;"Context B.Session 2";3,00116419047619;"Moderate/Positive";1,09900027688301;0,928571428571429
+"59";"Context B";"CMG087";"Session 2";"C/G";3;0,75;4;"Context B.Session 2";1,46208;"Anecdotal/Weak";0,37986007939277;0,5
+"60";"Context B";"CMG089";"Session 2";"C/G";4;0,8;5;"Context B.Session 2";2,07029333333333;"Anecdotal/Weak";0,727690304162116;0,571428571428571
+"61";"Context B";"CMG129";"Session 2";"C/G";3;0,75;4;"Context B.Session 2";1,46208;"Anecdotal/Weak";0,37986007939277;0,5
+"62";"Context B";"CMG154";"Session 2";"C/G";4;1;4;"Context B.Session 2";4,47392;"Moderate/Positive";1,49826498181732;1
+"63";"Context B";"CMG159";"Session 2";"C/G";4;0,666666666666667;6;"Context B.Session 2";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,285714285714286
+"64";"Context B";"CMG161";"Session 2";"C/G";3;0,75;4;"Context B.Session 2";1,46208;"Anecdotal/Weak";0,37986007939277;0,5
+"65";"Context B";"CMG162";"Session 2";"C/G";4;0,666666666666667;6;"Context B.Session 2";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,285714285714286
+"66";"Context B";"CMG169";"Session 2";"C/G";3;1;3;"Context B.Session 2";2,968;"Anecdotal/Weak";1,08788832530513;0,642857142857143
+"67";"Context B";"HG1";"Session 2";"C/G";2;0,666666666666667;3;"Context B.Session 2";1,05866666666667;"Anecdotal/Weak";0,0570102547167796;0,142857142857143
+"68";"Context B";"JJ9";"Session 2";"C/G";5;0,833333333333333;6;"Context B.Session 2";3,00116419047619;"Moderate/Positive";1,09900027688301;0,928571428571429
+"69";"Context B";"K1";"Session 2";"C/G";5;0,833333333333333;6;"Context B.Session 2";3,00116419047619;"Moderate/Positive";1,09900027688301;0,928571428571429
+"70";"Context B";"MG1";"Session 2";"C/G";5;0,833333333333333;6;"Context B.Session 2";3,00116419047619;"Moderate/Positive";1,09900027688301;0,928571428571429
+"71";"Context B";"AK42";"Session 3";"C/G";4;0,666666666666667;6;"Context B.Session 3";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,428571428571429
+"72";"Context B";"AK74";"Session 3";"C/G";2;0,333333333333333;6;"Context B.Session 3";0,344969142857143;"Contray Anecdotal/Weak";-1,06430030694465;0,142857142857143
+"73";"Context B";"CMG087";"Session 3";"C/G";5;0,833333333333333;6;"Context B.Session 3";3,00116419047619;"Moderate/Positive";1,09900027688301;0,857142857142857
+"74";"Context B";"CMG089";"Session 3";"C/G";4;0,666666666666667;6;"Context B.Session 3";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,428571428571429
+"75";"Context B";"CMG129";"Session 3";"C/G";2;0,333333333333333;6;"Context B.Session 3";0,344969142857143;"Contray Anecdotal/Weak";-1,06430030694465;0,142857142857143
+"76";"Context B";"CMG154";"Session 3";"C/G";3;1;3;"Context B.Session 3";2,968;"Anecdotal/Weak";1,08788832530513;0,5
+"77";"Context B";"CMG159";"Session 3";"C/G";4;0,666666666666667;6;"Context B.Session 3";1,13942247619048;"Anecdotal/Weak";0,130521534208438;0,428571428571429
+"78";"Context B";"CMG161";"Session 3";"C/G";5;0,833333333333333;6;"Context B.Session 3";3,00116419047619;"Moderate/Positive";1,09900027688301;0,857142857142857
+"79";"Context B";"CMG162";"Session 3";"C/G";5;0,833333333333333;6;"Context B.Session 3";3,00116419047619;"Moderate/Positive";1,09900027688301;0,857142857142857
+"80";"Context B";"CMG169";"Session 3";"C/G";5;0,833333333333333;6;"Context B.Session 3";3,00116419047619;"Moderate/Positive";1,09900027688301;0,857142857142857
+"81";"Context B";"HG1";"Session 3";"C/G";4;1;4;"Context B.Session 3";4,47392;"Moderate/Positive";1,49826498181732;0,928571428571429
+"82";"Context B";"JJ9";"Session 3";"C/G";6;1;6;"Context B.Session 3";10,7539291428571;"Strong/Positive";2,37527118945534;1
+"83";"Context B";"K1";"Session 3";"C/G";3;0,6;5;"Context B.Session 3";0,853866666666667;"Contray Anecdotal/Weak";-0,157980225407796;0,214285714285714
+"84";"Context B";"MG1";"Session 3";"C/G";5;0,833333333333333;6;"Context B.Session 3";3,00116419047619;"Moderate/Positive";1,09900027688301;0,857142857142857
