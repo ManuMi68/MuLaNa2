@@ -40,9 +40,8 @@ chkPkg(c("data.table", "dplyr", "tidyr","tibble", "parallel", "foreach",
           "nparLD", "nparcomp", "rankFD",
           "XNomial", "rstatix","EMT", "twosamples"))
 
-FxDir="/Volumes/RMmRa21/ADMmRa/ANOVA"
-setwd(FxDir)
-DirPath<-"Results"
+FxDir=getwd()
+DirPath<-"NeuroSpatial"
 if (!dir.exists(paste0(FxDir,"/",DirPath))) {dir.create(paste0(FxDir,"/",DirPath))}
 
 # Color schemes for the 4 tasks
@@ -56,27 +55,67 @@ TskCol1b<-c("red","orange","brown")
 
 
 # More specific functions, perhaps I will include them in RMMRA
-PosHocAut <-function(a0P, MxP, emP, OrdV,customP) {
-      em.simple.Global <- eval(parse(text = paste0("emmeans(a0P, ~ ", emP,")")))
-      dtresAllGlobal<- setkeyv(as.data.table(em.simple.Global),OrdV)
-      dtresAllGlobal[,`:=`(emmean=frmMM(emmean),SE=frmMM(SE,4),lower.CL=frmMM(lower.CL),upper.CL=frmMM(upper.CL))]
-      ResPostH.Global<-pairs(em.simple.Global,adjust = "holm")
-      ResPostH.GlobalOrto<-contrast(em.simple.Global, customP,adjust = "holm")
-      ResPostH.Global.MM <-PosHoc.MM(em.simple.Global)     # Estimate Rom from emmeans
-      em.Is<-em.r<-NA
-      em.Is<- eval(parse(text = paste0("emmeans(a0P, ~ ", emP,",pbkrtest.limit = 18240)")))
-      em.r<-  eval(parse(text = paste0("emmeans(MxP, ~ ", emP,",pbkrtest.limit = 18240)")))
-      ResPosHAPA.Global <- ResAPA2.23(em.Is, em.r, MxP)
-      Result<-list(
-        Global=      em.simple.Global,
-        Means=       dtresAllGlobal,
-        PosHoc=      ResPostH.Global,
-        PosHocPlan = ResPostH.GlobalOrto,
-        PosHocMM =   ResPostH.Global.MM,
-        PosHocAPA =  ResPosHAPA.Global
-  )
+   #define function to catch integer(0)
+integer0_test <- function(data) {
+    if(identical(data, integer(0))) {
+      return(0)
     }
-    
+    else {
+      return(data)
+    }}
+  
+PosHocAut <-function(a0P, MxP, emP, OrdV,customP) {
+  ExtMod<-integer0_test(grep("|",emP,fixed = T))
+  em.simple.Global <- eval(parse(text = paste0("emmeans(a0P, ~ ", emP,")")))
+  dtresAllGlobal<- setkeyv(as.data.table(em.simple.Global),OrdV)
+  dtresAllGlobal[,`:=`(emmean=frmMM(emmean),SE=frmMM(SE,4),lower.CL=frmMM(lower.CL),upper.CL=frmMM(upper.CL))]
+  ResPostH.Global<-pairs(em.simple.Global,adjust = "holm")
+  ResPostH.GlobalOrto<-contrast(em.simple.Global, customP,adjust = "holm")
+  ResPostH.Global.MM <-PosHoc.MM(em.simple.Global)     # Estimate Rom from emmeans
+  em.Is<-em.r<-NA
+  em.Is<- eval(parse(text = paste0("emmeans(a0P, ~ ", emP,",pbkrtest.limit = 18240)")))
+  em.r<-  eval(parse(text = paste0("emmeans(MxP, ~ ", emP,",pbkrtest.limit = 18240)")))
+  if (ExtMod==0) ResPosHAPA.Global <- ResAPA1.23(em.Is, em.r, MxP)
+  if (!ExtMod==0) ResPosHAPA.Global <- ResAPA2.23(em.Is, em.r, MxP)
+  #ResPosHAPA.Global <- ResAPA2.23(em.Is, em.r, MxP)
+  Result<-list(
+    Global=      em.simple.Global,
+    Means=       dtresAllGlobal,
+    PosHoc=      ResPostH.Global,
+    PosHocPlan = ResPostH.GlobalOrto,
+    PosHocMM =   ResPostH.Global.MM,
+    PosHocAPA =  ResPosHAPA.Global
+  )
+}
+
+ResAPA1.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
+  pp1 =    pairs(em.simpleIsP,adjust = "holm")
+  pp1Sum = summary(pp1)
+  pp1.MM = PosHoc.MM(em.simpleIsP)
+  pp1.r =  pairs(em.simple.rP,adjust = "holm")
+  pp1b=    eff_size(em.simple.rP, sigma = sigma(Mod.1rp), edf = df.residual(Mod.1rp))
+  pp1bSum= summary(pp1b)
+  initEs=grep("estimate",names(data.table(pp1Sum)))-1
+  
+  # He sustituido pHolm por pRom
+  # pp1.MM[1,pRom]
+  # pp1Sum[1,"p.value"]
+  ResAPA2<-list();#CtrEl=1
+  for (CtrEl in 1:nrow(pp1Sum)) {
+    ResAPA2[CtrEl]<- paste0(pp1Sum[CtrEl,1],": ",
+                            "t(",formatC(round(pp1Sum[CtrEl,"df"],2),2,format="f"),") = ",
+                            formatC(round(pp1Sum[CtrEl,"t.ratio"],2),2,format="f"), ", p = ",
+                            # formatC(round(pp1Sum[CtrEl,"p.value"],4),4,format="f"), ", dPAIR = ",
+                            pp1.MM[CtrEl,pRom], ", dPAIR = ",  
+                            formatC(round(pp1bSum[CtrEl,"effect.size"],2),2,format="f"),
+                            " (", InterpdCohen(pp1bSum[CtrEl,"effect.size"])," effect)",
+                            ", CI 95% = [",
+                            formatC(round(pp1bSum[CtrEl,"lower.CL"],2),2,format="f"), ", ",
+                            formatC(round(pp1bSum[CtrEl,"upper.CL"],2),2,format="f"), "]"
+    )}
+  ResAPA2
+}
+
 ResAPA2.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
       pp1 =    pairs(em.simpleIsP,adjust = "holm")
       pp1Sum = summary(pp1)
@@ -102,6 +141,438 @@ ResAPA2.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
       ResAPA2
     }
 
+# Functions that computes Bayes Normandin-Ramos, adapted to the contrast of 0.25
+BayNormRam<-function(z,N,li=.25,ls=.9,Nulo=.25) {
+  ct=1/(ls-li)
+  Nu=ct*integrate(MiBer, z = z, N = N, lower = li,upper = ls)[[1]]
+  De=MiBer(Nulo,z = z, N = N)
+  Res=Nu/De
+  Res}
+MiBer<-function(Theta,z,N) {(Theta^z) * ((1-Theta)^(N-z))}
+Productorio<-function(x) {Prodd=1;for (i in 1:length(x)) Prodd=Prodd*x[i];Prodd}
+
+BF1Grp <- function(DTp, colp=c("green3","green4"),logEs10=F) {
+  ColPer<-c("cyan3","blue","red", "magenta2");
+  if (logEs10) {LgEscala=log10(3);xlbl="Log10 (BF)"}
+  if (!logEs10) {LgEscala=log(3); xlbl="Log (BF)"}
+  P <- ecdf(DTp$logBF)
+  Py = P(LgEscala)
+  
+  cdfbas<-ggplot (data=DTp, aes(x=logBF))
+  cdfGrp<- cdfbas + stat_ecdf(linewidth=1,pad = T) +
+    scale_colour_manual(values=colp) +
+    theme_classic2() +
+    theme(legend.title=element_blank(),
+          legend.text=element_text(size=10),
+          legend.position=c(0.2,0.8), 
+          text = element_text(size=20),
+          axis.text.x = element_text(colour = "black"),
+          axis.text.y = element_text(colour = "black"),
+          plot.caption = element_text(hjust = 0.5,size = 12)) +
+    labs(y="Cumulative Proportion", x=xlbl,
+         caption ="<----Favours chance/learning-----|-----Favours learning/chance---->") +
+    xlim(-4,4)  +
+    geom_vline(xintercept = LgEscala, linetype="dashed", linewidth=.25) +
+    geom_vline(xintercept = -LgEscala, linetype="dashed", linewidth=.25) +
+    geom_vline(xintercept = 0, linetype="dashed", linewidth=.25) +
+    geom_hline(yintercept = .5, linetype="dashed", linewidth=.25) +
+    annotate(geom="text", x=LgEscala, y=Py, label=percent(Py), color="red", hjust=0, vjust=0) +
+    geom_point(aes(x=LgEscala,y=Py),color="red")
+  cdfGrp
+}
+
+BFAllGrp1 <- function(DTpp, colp=c("green3","green4"),logEs10=F) {
+  ColPer<-c("cyan3","blue","red", "magenta2");
+  
+  if (logEs10) {LgEscala=log10(3);xlbl="Log10 (BF)"}
+  if (!logEs10) {LgEscala=log(3); xlbl="Log (BF)"}
+  library(grid)
+  
+  JnGrp<-lapply(levels(DTpp$Day), function(xy) {
+    DTppS<-DTpp[Day==xy]
+    Py<-DTppS[, lapply(.SD, function(z) stats::ecdf(z)(LgEscala)), .SDcols = "logBF", by = .(Group) ]
+    cdfbas<-ggplot (data=DTppS, aes(x=logBF, group =Group, color = Group, linetype = Group))
+    cdfGrp<- cdfbas + stat_ecdf(linewidth=1,pad = T) +
+      scale_colour_manual(values=colp) +
+      theme_classic2() +
+      theme(legend.title=element_blank(),
+            legend.text=element_text(size=10),
+            legend.position=c(0.2,0.8), 
+            text = element_text(size=20),
+            axis.text.x = element_text(colour = "black"),
+            axis.text.y = element_text(colour = "black"),
+            plot.caption = element_text(hjust = 0.5,size = 12)) +
+      labs(y="Cumulative Proportion", x=xlbl) +
+      # labs(y="Cumulative Proportion", x=xlbl,
+      #      caption ="<----Favours chance/learning-----|-----Favours learning/chance---->",cex.caption = 0.5) +
+      xlim(-4,4)  +
+      geom_vline(xintercept = LgEscala, linetype="dashed", linewidth=.25) +
+      geom_vline(xintercept = -LgEscala, linetype="dashed", linewidth=.25) +
+      geom_vline(xintercept = 0, linetype="dashed", linewidth=.25) +
+      geom_hline(yintercept = .5, linetype="dashed", linewidth=.25) +
+      annotate(geom="text", x=LgEscala, y=Py$logBF, label=percent(Py$logBF), color="gray50", hjust=0, vjust=0) +
+      geom_point(data = data.frame(x=rep(LgEscala,length(levels(DTpp$Group))), Py),aes(x=x,y=logBF),color="gray50",size=2) +
+      annotate("rect", xmin=-Inf, xmax=0, ymin=-Inf, ymax=1, alpha=0.2, fill="red") +
+      annotate("rect", xmin=0, xmax=+Inf, ymin=-Inf, ymax=1, alpha=0.2, fill="green") +
+      annotate(geom="text",x=4,y=.5,label="Favors Learning", cex=5, hjust=1, vjust=0) +
+      annotate(geom="text",x=-4,y=.5,label="Favors Chance", cex=5, hjust=0, vjust=0) +
+      coord_cartesian(ylim=c(0,1), clip = "off")
+      cdfGrp
+    
+  })
+  pltAll<-plot_grid(plotlist=JnGrp,nrow = 1, labels=levels(DTpp$Day), hjust=-2.5)
+  names(JnGrp) <-levels(DTpp$Day)
+  Res<-list(Session=JnGrp,All=pltAll )
+  Res
+}
+
+BFAllGrp2 <- function(DTpp, colp=c("green3","green4"),logEs10=F) {
+  ColPer<-c("cyan3","blue","red", "magenta2");
+  if (logEs10) {LgEscala=log10(3);xlbl="Log10 (BF)"}
+  if (!logEs10) {LgEscala=log(3); xlbl="Log (BF)"}
+  
+  JnGrp<-lapply(levels(DTpp$Group), function(xy) {
+    DTppS<-DTpp[Group==xy]
+    Py<-DTppS[, lapply(.SD, function(z) stats::ecdf(z)(LgEscala)), .SDcols = "logBF", by = .(Day) ]
+    cdfbas<-ggplot (data=DTppS, aes(x=logBF, group =Day, color = Day, linetype = Day))
+    cdfGrp<- cdfbas + stat_ecdf(linewidth=1,pad = T) +
+      scale_colour_manual(values=colp) +
+      theme_classic2() +
+      theme(legend.title=element_blank(),
+            legend.text=element_text(size=10),
+            legend.position=c(0.2,0.8), 
+            text = element_text(size=20),
+            axis.text.x = element_text(colour = "black"),
+            axis.text.y = element_text(colour = "black"),
+            plot.caption = element_text(hjust = 0.5,size = 12)) +
+      labs(y="Cumulative Proportion", x=xlbl) +
+      # labs(y="Cumulative Proportion", x=xlbl,
+      #      caption ="<----Favours chance/learning-----|-----Favours learning/chance---->",cex.caption = 0.5) +
+      xlim(-4,4)  +
+      geom_vline(xintercept = LgEscala, linetype="dashed", linewidth=.25) +
+      geom_vline(xintercept = -LgEscala, linetype="dashed", linewidth=.25) +
+      geom_vline(xintercept = 0, linetype="dashed", linewidth=.25) +
+      geom_hline(yintercept = .5, linetype="dashed", linewidth=.25) +
+      annotate(geom="text", x=LgEscala, y=Py$logBF, label=percent(Py$logBF), color="gray50", hjust=0, vjust=0) +
+      geom_point(data = data.frame(x=rep(LgEscala,length(levels(DTpp$Day))), Py),aes(x=x,y=logBF),color="gray50",size=2) +
+      annotate("rect", xmin=-Inf, xmax=0, ymin=-Inf, ymax=1, alpha=0.2, fill="red") +
+      annotate("rect", xmin=0, xmax=+Inf, ymin=-Inf, ymax=1, alpha=0.2, fill="green") +
+      annotate(geom="text",x=4,y=.5,label="Favors Learning", cex=5, hjust=1, vjust=0) +
+      annotate(geom="text",x=-4,y=.5,label="Favors Chance", cex=5, hjust=0, vjust=0) +
+      coord_cartesian(ylim=c(0,1), clip = "off")
+    cdfGrp 
+    
+  })
+  pltAll<-plot_grid(plotlist=JnGrp,nrow = 1, labels=levels(DTpp$Group), hjust=-2.5)
+  names(JnGrp) <-levels(DTpp$Group)
+  Res<-list(Group=JnGrp,All=pltAll )
+  Res
+}
+
+BFAllGrp3 <- function(DTpp, colp=c("green3","green4"),logEs10=F) {
+  ColPer<-c("cyan3","blue","red", "magenta2");
+  if (logEs10) {LgEscala=log10(3);xlbl="Log10 (BF)"}
+  if (!logEs10) {LgEscala=log(3); xlbl="Log (BF)"}
+  
+  
+    DTppS<-DTpp
+    Py<-DTppS[, lapply(.SD, function(z) stats::ecdf(z)(LgEscala)), .SDcols = "logBF", by = .(Day) ]
+    cdfbas<-ggplot (data=DTppS, aes(x=logBF, group =Day, color = Day, linetype = Day))
+    cdfGrp<- cdfbas + stat_ecdf(linewidth=1,pad = T) +
+      scale_colour_manual(values=colp) +
+      theme_classic2() +
+      theme(legend.title=element_blank(),
+            legend.text=element_text(size=10),
+            legend.position=c(0.2,0.8), 
+            text = element_text(size=20),
+            axis.text.x = element_text(colour = "black"),
+            axis.text.y = element_text(colour = "black"),
+            plot.caption = element_text(hjust = 0.5,size = 12)) +
+      labs(y="Cumulative Proportion", x=xlbl) +
+      # labs(y="Cumulative Proportion", x=xlbl,
+      #      caption ="<----Favours chance/learning-----|-----Favours learning/chance---->",cex.caption = 0.5) +
+      xlim(-4,4)  +
+      geom_vline(xintercept = LgEscala, linetype="dashed", linewidth=.25) +
+      geom_vline(xintercept = -LgEscala, linetype="dashed", linewidth=.25) +
+      geom_vline(xintercept = 0, linetype="dashed", linewidth=.25) +
+      geom_hline(yintercept = .5, linetype="dashed", linewidth=.25) +
+      annotate(geom="text", x=LgEscala, y=Py$logBF, label=percent(Py$logBF), color="gray50", hjust=0, vjust=0) +
+      geom_point(data = data.frame(x=rep(LgEscala,length(levels(DTpp$Day))), Py),aes(x=x,y=logBF),color="gray50",size=2) +
+      annotate("rect", xmin=-Inf, xmax=0, ymin=-Inf, ymax=1, alpha=0.2, fill="red") +
+      annotate("rect", xmin=0, xmax=+Inf, ymin=-Inf, ymax=1, alpha=0.2, fill="green") +
+      annotate(geom="text",x=4,y=.5,label="Favors Learning", cex=5, hjust=1, vjust=0) +
+      annotate(geom="text",x=-4,y=.5,label="Favors Chance", cex=5, hjust=0, vjust=0) +
+      coord_cartesian(ylim=c(0,1), clip = "off")
+    cdfGrp 
+    
+  
+  
+}
+
+AcumBFLog.23<-function(DTp,Gs,Ds,logEs10=T,wG=T,wS=T) {
+  ValsBF2=seq(-2, 2, by=1.0)
+  
+  DTp<-DTp[Group==Gs&Day==Ds]
+  Global  <- Productorio(DTp$BF)
+  ResBFg1 <- DTp$logBF
+  P <- ecdf(DTp$logBF)
+  
+  if (logEs10) {          
+    ValsBF=sort(c(seq(-2,2,by=.5),-log10(3),log10(3),-.01));
+    GlobalLog<-log10(Global)
+  }
+  if (!logEs10) {
+    ValsBF=sort(c(seq(-2,2,by=.5),-log(3),log(3),-.01));
+    GlobalLog<-log(Global)
+  }        
+  
+  if (wG&wS) laEtiq=paste0(Gs," ",Ds)
+  if (wG&!wS) laEtiq=Gs
+  if (!wG&wS) laEtiq=Ds
+  
+  BFAc <-list(
+    BF =       DTp$BF,
+    InterBF =  InterpBF(DTp$BF),
+    LogBF =    DTp$logBF,	
+    DT =       data.table(Group=rep(laEtiq,length(ResBFg1)),BF=ResBFg1),
+    Pecdf =    P,
+    empcdf =   empirical_cdf(ResBFg1, ubounds=ValsBF),
+    empcdf2 =  empirical_cdf(ResBFg1, ubounds=ValsBF2),
+    NegPerc =  percent(P(0)),
+    BFGlobal = paste0("BF All= ",round(Global,3), "; Log BF All= ",round(GlobalLog,3), "; ",InterpBF(Global), " Evidence"),
+    BFAll =    round(Global,3),
+    LogBFAll = round(GlobalLog,3),
+    InterBFAll = InterpBF(Global),
+    Grp <- BF1Grp(DTp = DTp,logEs10 = logEs10)
+  )
+  BFAc
+}
+
+AcumBFLog.23.NoCx<-function(DTp,Ds,logEs10=T,wG=T,wS=T) {
+  ValsBF2=seq(-2, 2, by=1.0)
+  
+  DTp<-DTp[Day==Ds]
+  Global  <- Productorio(DTp$BF)
+  ResBFg1 <- DTp$logBF
+  P <- ecdf(DTp$logBF)
+  
+  if (logEs10) {          
+    ValsBF=sort(c(seq(-2,2,by=.5),-log10(3),log10(3),-.01));
+    GlobalLog<-log10(Global)
+  }
+  if (!logEs10) {
+    ValsBF=sort(c(seq(-2,2,by=.5),-log(3),log(3),-.01));
+    GlobalLog<-log(Global)
+  }        
+  
+  laEtiq=Ds
+  
+  BFAc <-list(
+    BF =       DTp$BF,
+    InterBF =  InterpBF(DTp$BF),
+    LogBF =    DTp$logBF,	
+    DT =       data.table(BF=ResBFg1),
+    Pecdf =    P,
+    empcdf =   empirical_cdf(ResBFg1, ubounds=ValsBF),
+    empcdf2 =  empirical_cdf(ResBFg1, ubounds=ValsBF2),
+    NegPerc =  percent(P(0)),
+    BFGlobal = paste0("BF All= ",round(Global,3), "; Log BF All= ",round(GlobalLog,3), "; ",InterpBF(Global), " Evidence"),
+    BFAll =    round(Global,3),
+    LogBFAll = round(GlobalLog,3),
+    InterBFAll = InterpBF(Global),
+    Grp <- BF1Grp(DTp = DTp,logEs10 = logEs10)
+  )
+  BFAc
+}
+
+com.Glob <- function(DTp) {
+  res<- foreach(i=levels(DTp$Group),.combine='c') %:%
+    foreach(j=levels(DTp$Day)) %dopar% { 
+      AcumBFLog.23(DTp, i, j, F, T, T) }
+  names(res) <-(foreach(i=levels(DTp$Group),.combine='c') %:%
+                           foreach(j=levels(DTp$Day), .combine='c') %dopar% {
+                             paste0(i, ".", j)
+                           })
+  res
+}
+
+com.Glob.NoCx <- function(DTp) {
+    foreach(j=levels(DTp$Day)) %dopar% { 
+      AcumBFLog.23.NoCx(DTp, j, F, T, T) }
+}
+
+com.Glob.APA <- function(DTp) {
+  foreach(i=levels(DTp$Group),.combine='c') %:%
+    foreach(j=levels(DTp$Day), .combine='c') %dopar% {
+      paste0(i," ",j,": ",AcumBFLog.23(DTp, i, j, F, T, T)$BFGlobal)}
+}
+
+com.Glob.APA.NoCx <- function(DTp) {
+    foreach(j=levels(DTp$Day), .combine='c') %dopar% {
+      paste0(j,": ",AcumBFLog.23.NoCx(DTp, j, F, T, T)$BFGlobal)}
+}
+
+com.ecdf<-function(DTp) {
+  Resecdf<-list()
+  setkey(DTp,Group,Day)
+  lv1=length(levels(DTp$Group));lv2=length(levels(DTp$Day))
+  Resecdf[[1]]<-  unlist(lapply(1:lv1, function (x) lapply(1:lv2, function (y) 
+    DTp[.(levels(DTp$Group)[x],levels(DTp$Day)[y],with=F),stats::ecdf(logBF)])),recursive = F)
+  
+  names(Resecdf[[1]]) <-(foreach(i=levels(DTp$Group),.combine='c') %:%
+                           foreach(j=levels(DTp$Day), .combine='c') %dopar% {
+                             paste0(i, ".", j)
+                           })
+  
+  # Resecdf[[2]]<-  unlist(lapply(1:lv1, function (x) lapply(1:lv2, function (y) 
+  #  DTp[.(levels(DTp$Group)[x],levels(DTp$Day)[y],with=F),empirical_cdf(logBF, ubounds=ValsBF)])),
+  #  recursive = F)
+  # Resecdf[[3]]<-  unlist(lapply(1:lv1, function (x) lapply(1:lv2, function (y) 
+  #  DTp[.(levels(DTp$Group)[x],levels(DTp$Day)[y],with=F),empirical_cdf(logBF, ubounds=ValsBF2)])),
+  #  recursive = F)
+  Resecdf[[2]] <-foreach(i=1:lv1,.combine='cbind') %:%
+    foreach(j=1:lv2, .combine='cbind') %dopar% {
+      sapply (DTp[.(levels(DTp$Group)[i],levels(DTp$Day)[j],with=F),
+                  empirical_cdf(logBF, ubounds=ValsBF)]$CDF, percent)
+    } %>% as.data.frame %>%
+    `colnames<-`(foreach(i=levels(DTp$Group),.combine='c') %:%
+                   foreach(j=levels(DTp$Day), .combine='c') %dopar% {
+                     paste0(i, ".", j)
+                   }) %>%
+    mutate(UpperBound= round(ValsBF,2), .before=colnames(.)[1])
+  Resecdf[[3]] <-foreach(i=1:lv1,.combine='cbind') %:%
+    foreach(j=1:lv2, .combine='cbind') %dopar% {
+      sapply (DTp[.(levels(DTp$Group)[i],levels(DTp$Day)[j],with=F),
+                  empirical_cdf(logBF, ubounds=ValsBF2)]$CDF, percent)
+    } %>% as.data.frame %>%
+    `colnames<-`(foreach(i=levels(DTp$Group),.combine='c') %:%
+                   foreach(j=levels(DTp$Day), .combine='c') %dopar% {
+                     paste0(i, ".", j)
+                   }) %>%
+    mutate(UpperBound= round(ValsBF2,2), .before=colnames(.)[1])
+  Resecdf
+}
+
+com.ecdf.NoCx<-function(DTp) {
+  Resecdf<-list()
+  setkey(DTp,Day)
+  lv1=1;lv2=length(levels(DTp$Day))
+  Resecdf[[1]]<-  unlist(lapply(1:lv1, function (x) lapply(1:lv2, function (y) 
+    DTp[.(levels(DTp$Day)[y],with=F),stats::ecdf(logBF)])),recursive = F)
+  names(Resecdf[[1]]) <-levels(DTp$Day)
+  Resecdf[[2]] <-foreach(i=1:lv1,.combine='cbind') %:%
+    foreach(j=1:lv2, .combine='cbind') %dopar% {
+      sapply (DTp[.(levels(DTp$Day)[j],with=F),
+                  empirical_cdf(logBF, ubounds=ValsBF)]$CDF, percent)
+    } %>% as.data.frame %>%
+    `colnames<-`(
+                   foreach(j=levels(DTp$Day), .combine='c') %dopar% {
+                     paste0(j)
+                   }) %>%
+    mutate(UpperBound= round(ValsBF,2), .before=colnames(.)[1])
+  Resecdf[[3]] <-foreach(i=1:lv1,.combine='cbind') %:%
+    foreach(j=1:lv2, .combine='cbind') %dopar% {
+      sapply (DTp[.(levels(DTp$Day)[j],with=F),
+                  empirical_cdf(logBF, ubounds=ValsBF2)]$CDF, percent)
+    } %>% as.data.frame %>%
+    `colnames<-`(
+                   foreach(j=levels(DTp$Day), .combine='c') %dopar% {
+                     paste0(j)
+                   }) %>%
+    mutate(UpperBound= round(ValsBF2,2), .before=colnames(.)[1])
+  Resecdf
+}
+
+MakeBF<-function(DTppp, Nmpp) {
+  Global.i<- DTppp %>% 
+    .[,.(BF=Productorio(BF)),by=list(Group,Day)] %>%
+    .[,InterBF:=InterpBF(BF)] %>%
+    .[,logBF:=log(BF)]  %>%
+    .[,BF:=frmMM(BF,4)] %>%
+    .[,logBF:=frmMM(logBF,4)] %>%
+    #dplyr::rename(., BF=V1) %>%
+    data.table()
+  ecdf.i<-com.ecdf(DTppp)
+  Detall.i <- com.Glob(DTppp)
+  GlobalAPA.i <- com.Glob.APA(DTppp)
+  GrpGroup.i<-BFAllGrp1(DTppp,TskCol2)
+  GrpDay.i<-  BFAllGrp2(DTppp, TskCol1b)
+  GrpJn.i<-plot_grid(plotlist=lapply (Detall.i, "[[", 13), 
+                     labels = c(t(outer(levels(DTppp$Group), levels(DTppp$Day), FUN=paste,sep=" "))))
+  
+  write.csv2(Global.i,paste0(Nmpp," Global.csv"))
+  zz<-file(paste0(Nmpp," Global.txt"),"w")
+  sink(zz);
+  print(GlobalAPA.i);
+  cat("\n");
+  print(ecdf.i[[2]]);
+  cat("\n"); cat("\n");
+  print(ecdf.i[[3]]);
+  cat("\n");cat("\n");cat("\n");
+  print(Detall.i)
+  sink(); close(zz)
+  for (i in 1:length(levels(DTppp$Group))) {ggsave(paste0(Nmpp," CumDis_",levels(DTppp$Group)[i], ".pdf"),GrpDay.i[[1]][[i]])}
+  for (i in 1:length(levels(DTppp$Day)))   {ggsave(paste0(Nmpp," CumDis_",levels(DTppp$Day)[i], ".pdf"),GrpGroup.i[[1]][[i]])}
+  ggsave(paste0(Nmpp," CumDis_CxtBySess.pdf"),GrpGroup.i[[2]],width = 12,height = 6)
+  ggsave(paste0(Nmpp," CumDis_SessByCxt.pdf"),GrpDay.i[[2]],width = 8,height = 6)
+  ggsave(paste0(Nmpp," CumDis_All.pdf"),GrpJn.i,width = 20,height = 14)
+  
+  Res <-list(
+    Global= Global.i,
+    ecdfMM = ecdf.i,
+    Detall = Detall.i,
+    GlobalAPA = GlobalAPA.i,
+    GrpGroup = GrpGroup.i,
+    GrpDay = GrpDay.i,
+    GrpJn = GrpJn.i
+  )
+  Res
+}
+
+MakeBFNoCx<-function(DTppp, Nmpp) {
+  Global.i<- DTppp %>% 
+    .[,.(BF=Productorio(BF)),by=list(Day)] %>%
+    .[,InterBF:=InterpBF(BF)] %>%
+    .[,logBF:=log(BF)]  %>%
+    .[,BF:=frmMM(BF,4)] %>%
+    .[,logBF:=frmMM(logBF,4)] %>%
+    #dplyr::rename(., BF=V1) %>%
+    data.table()
+  ecdf.i<-com.ecdf.NoCx(DTppp)
+  Detall.i <- com.Glob.NoCx(DTppp)
+    names(Detall.i)<-levels(DTppp$Day)
+  GlobalAPA.i <- com.Glob.APA.NoCx(DTppp)
+  # GrpGroup.i<-BFAllGrp1(DTppp,TskCol2)
+  GrpDay.i<-  BFAllGrp3(DTppp, TskCol1b)
+  GrpJn.i<-plot_grid(plotlist=lapply (Detall.i, "[[", 13), 
+                     labels = levels(DTppp$Day))
+  
+  write.csv2(Global.i,paste0(Nmpp," Global.csv"))
+  zz<-file(paste0(Nmpp," Global.txt"),"w")
+    sink(zz);
+    print(GlobalAPA.i);
+    cat("\n");
+    print(ecdf.i[[2]]);
+    cat("\n"); cat("\n");
+    print(ecdf.i[[3]]);
+    cat("\n");cat("\n");cat("\n");
+    print(Detall.i)
+  sink(); close(zz)
+  ggsave(paste0(Nmpp," CumDis_SessByCxt.pdf"),GrpDay.i)
+  ggsave(paste0(Nmpp," CumDis_All.pdf"),GrpJn.i,width = 20,height = 14)
+  
+  Res <-list(
+    Global= Global.i,
+    ecdfMM = ecdf.i,
+    Detall = Detall.i,
+    GlobalAPA = GlobalAPA.i,
+    # GrpGroup = GrpGroup.i,
+    GrpDay = GrpDay.i,
+    GrpJn = GrpJn.i
+  )
+  Res
+}
+
 ```
 
 ```{r ResCtrl1, eval=F, echo=FALSE}
@@ -120,18 +591,22 @@ ResAPA2.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
     
 ```
 
-# **Figure 1. Reorientation behavior in a two-context paradigm**
+# 1) Reorienting behavior in a two-context paradigm  
 
-------------------------------------------------------------------------
+## **Figure 1. Reorientation behavior in a two-context paradigm**
+
+***   
 
 > **Figure 1.** Reorientation behavior in a two-context paradigm. A) Schematic of experimental chambers showing reward location (yellow star) in Context A (left) and Context B (right). B) Schematic of session structure of two-context paradigm. Animals (N = 14) are disoriented before being placed in each context, in alternating order on 12 consecutive trials. C) Percentage of digs in each cup location on test trials on day 1 (left), day 2 (center), and day 3 (right). D) Boxplots showing distribution of digs in geometrically correct vs. incorrect axes in each context. E) Boxplots showing distribution of digs in each cup location combining both contexts. In all boxplots graphs, the boxes indicate the upper and lower quartiles of the data and the whiskers (extending lines) the minimum and maximum outside the quartiles. The horizontal line indicates the median. Dots represent individual data points and asterisks (\*) indicate p \< 0.05. F) Cumulative proportion of Bayes Factor (BF) on days 1 to 3 per context evaluating the alternative model (MAlt) that animals preferentially dug on a distinct rewarded axis in each context vs. the null model (Mnull) that animals dug by chance. G) Cumulative proportion of individual Bayes Factors (BF) across days 1 to 3 combining contexts evaluating the alternative model (MAlt) that animals increased digging in C locations with experience vs. the null model (Mnull) that animals dug by chance Conventional values showing the border marking credibility for Malt (log(BF) \> log(1/3)= 1.1) and Mnull (log(BF) \< log(1/3)= -1.1) are indicated by vertical dashed lines. The value of half (0.5) of the sample is marked by a horizontal dashed line.
 
-------------------------------------------------------------------------
+***   
 
-## Fig 1D) Boxplots showing distribution of digs in geometrically correct vs. incorrect axes in each context {Design (2 Location x S) x (3 Day x S) x (2 Context x S)}
+### Fig 1D) Boxplots showing distribution of digs in geometrically correct vs. incorrect axes in each context {Design (2 Axis x S) x (3 Day x S) x (2 Context x S)}
 
-```{r F1D,}
-
+```{r F1D, warning=FALSE, message=FALSE}
+  NmRoo = paste0(DirPath,"/", "Fig1D")
+  Mk.dir(NmRoo)
+  
   DT1 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/BehavTwoContext.RDS")))
   DTp<-copy(DT1)
   
@@ -151,7 +626,8 @@ ResAPA2.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
    
 # Descriptive
   DTRes<-DTp[,c(N = .N,as.list(summary(Proportion))), by=.(Axis,Day,Context)]
-  write.csv2(DTRes,"BehavTwoContext_Descriptive.csv")
+  write.csv2(DTRes,paste0(NmRoo, "/BehavTwoContext_Descriptive.csv"))
+ 
  
 # AOV
   a0 <- aov_ez("Subject", "Proportion", DTp,
@@ -170,16 +646,17 @@ ResAPA2.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
   <<ResCtrl1>>
 ```
 
-## Fig 1E) Boxplots showing distribution of digs in each cup location combining both contexts {Design (4 Dig x S) x (3 Day x S)}
+### Fig 1E) Boxplots showing distribution of digs in each cup location combining both contexts {Design (4 Dig x S) x (3 Day x S)}
 
-```{r F1E, }
-
+```{r F1E, warning=FALSE, message=FALSE}
+  NmRoo = paste0(DirPath,"/", "Fig1E")
+  Mk.dir(NmRoo)
   DT2 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/DigBehavioralData.RDS")))
   DTp<-copy(DT2)
   
 # Box Plot
   ColPer=c("#D599D7", "#AA33B0","#700075")
-  Grp1<- Grph.2023(
+  Grp<- Grph.2023(
     DatP = DTp,
     Dvp="Perc", VarX="Dig", VarFill="Day",
     LblsP =c("Cluster Quality", "","Dig Percent Per Animal","Location of first dig"),
@@ -190,8 +667,8 @@ ResAPA2.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
   
 # Descriptive
   DTRes<-DTp[,c(N = .N,as.list(summary(Perc))), by=.(Dig,Day)]
-  write.csv2(DTRes,"DigBehavioralData_Descriptive.csv")
- 
+  write.csv2(DTRes,paste0(NmRoo, "/DigBehavioralData_Descriptive.csv"))
+  
 # AOV
   a0 <- aov_ez("Subject", "Perc", DTp,
         within = c("Dig","Day"))
@@ -210,3 +687,226 @@ ResAPA2.23<-function(em.simpleIsP, em.simple.rP, Mod.1rp) {
   PosH.4w = PosHocAut(a0, Mod.1r, "Dig|Day", c("Day","emmean"), custom=custom)
   <<ResCtrl1>> 
 ```
+
+### Fig 1F) Cumulative proportion of Bayes Factor (BF) on days 1 to 3 per context  
+
+```{r F1F, warning=FALSE, message=FALSE}
+  NmRoo = paste0(DirPath,"/", "Fig1F")
+  Mk.dir(NmRoo)
+  ValsBF2=seq(-2, 2, by=1.0)
+  logEs10=F
+  if (logEs10)  ValsBF=sort(c(seq(-2,2,by=.5),-log10(3),log10(3),-.01))
+  if (!logEs10) ValsBF=sort(c(seq(-2,2,by=.5),-log(3),log(3),-.01))
+  # unique(DT.BF$Subj) AK42   AK74   JJ9    HG1    K1     MG1    CMG159 CMG089 CMG129 CMG154 CMG162 CMG161 CMG169 CMG087
+  Nsj=14; LgSess=12
+  nFi=Nsj*LgSess*2+Nsj*4 # Check Files: 392
+  DT.BF <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/DigBehavioralDataForBF.RDS")))
+  
+  # Process the data to test:
+   # the alternative model (MAlt) that animals preferentially dug on the rewarded axis
+   # in each context (long wall right in Context A and long wall left in Context B) vs.
+   # the null model (Mnull) that animals dug by chance (50%).
+   # Note especially line:  .[,BF:=BayNormRam(z,N,li=.5,ls=.9,Nulo=.5),by=list(Group,Day,Subj)] 
+  DT.50<-data.table(copy(DT.BF)) %>%
+        .[,AxisMM :=Dig] %>% .[,HitsMM :=Dig] %>%
+        mutate(AxisMM = dplyr::recode(AxisMM, C = "C/G",F = "N/W", G = "C/G", W="N/W")) %>%
+        mutate(HitsMM = dplyr::recode(HitsMM, C = "1",  F = "0",   G = "1",   W="0")) %>%
+        mutate(HitsMM = as.numeric(as.character(HitsMM))) %>%
+        data.table() %>%
+        .[, data.table(table(Subj,Day,AxisMM)),by=Group] %>%
+        .[,Perc:=N/sum(N),by=list(Group,Subj,Day)] %>%
+        .[,zz:=sum(N),by=list(Group,Subj,Day)] %>%
+        .[AxisMM=="C/G"] %>%
+        .[,Inter:=interaction(Group,Day)] %>%
+        dplyr::rename(., z=N) %>%
+        dplyr::rename(., N=zz) %>%
+        .[,BF:=BayNormRam(z,N,li=.5,ls=.9,Nulo=.5),by=list(Group,Day,Subj)] %>%
+        .[,InterBF:=InterpBF(BF),by=list(Group,Day,Subj)] %>%
+        IfFilterLog(.,Fs = logEs10) %>%
+        .[, ecdfr := lapply(.SD, function(z) stats::ecdf(z)(z)), .SDcols = "logBF", by = .(Group,Day) ] %>%
+        mutate(Day=factor(Day)) %>%
+        dplyr::rename(., Subject=Subj)  %>%
+        as.data.table()
+  
+  # Overall results and Fig. 1F
+  Res.50 = MakeBF(DT.50, paste0(NmRoo, "/50Chan"))
+  Res.50$Global
+  Res.50$GrpDay$All
+```
+
+### Table S2) Individual Data of Fig.1F)   
+```{r TS2, warning=FALSE, message=FALSE}
+
+  DT.50[, .(Group,Day,Subject, logBF) ]
+```
+
+
+### Fig 1G) Cumulative proportion of individual Bayes Factors (BF) across days 1 to 3 combining contexts  
+
+```{r F1G, warning=FALSE, message=FALSE}
+  NmRoo = paste0(DirPath,"/", "Fig1G")
+  Mk.dir(NmRoo)
+  ValsBF2=seq(-2, 2, by=1.0)
+  logEs10=F
+  if (logEs10)  ValsBF=sort(c(seq(-2,2,by=.5),-log10(3),log10(3),-.01))
+  if (!logEs10) ValsBF=sort(c(seq(-2,2,by=.5),-log(3),log(3),-.01))
+  # unique(DT.BF$Subj) AK42   AK74   JJ9    HG1    K1     MG1    CMG159 CMG089 CMG129 CMG154 CMG162 CMG161 CMG169 CMG087
+  Nsj=14; LgSess=12
+  nFi=Nsj*LgSess*2+Nsj*4 # Check Files: 392
+  DT.BF <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/DigBehavioralDataForBF.RDS")))
+ 
+  # Process the data to test:
+     # the alternative model (MAlt) that animals dug in the rewarded cup location vs.
+     # the null model (Mnull) that animals dug by chance (25%).
+     # Note especially line:  .[,BF:=BayNormRam(z,N,li=.25,ls=.9,Nulo=.25),by=list(Day,Subj)]
+  DT.25.NoCx<-data.table(copy(DT.BF)) %>%
+        .[,AxisMM :=Dig] %>% .[,HitsMM :=Dig] %>%
+        mutate(AxisMM = dplyr::recode(AxisMM, C = "C/G",F = "N/W", G = "N/W", W="N/W")) %>%
+        mutate(HitsMM = dplyr::recode(HitsMM, C = "1",  F = "0",   G = "0",   W="0")) %>%
+        mutate(HitsMM = as.numeric(as.character(HitsMM))) %>%
+        data.table() %>%
+        .[, data.table(table(Subj,AxisMM)),by=Day] %>%
+        .[,Perc:=N/sum(N),by=list(Day,Subj)] %>%
+        .[,zz:=sum(N),by=list(Day, Subj)] %>%
+        .[AxisMM=="C/G"] %>%
+        .[,Inter:=Day] %>%
+        dplyr::rename(., z=N) %>%
+        dplyr::rename(., N=zz) %>%
+        .[,BF:=BayNormRam(z,N,li=.25,ls=.9,Nulo=.25),by=list(Day,Subj)] %>%
+        .[,InterBF:=InterpBF(BF),by=list(Day,Subj)] %>%
+         IfFilterLog2(.,Fs = logEs10) %>%
+        .[, ecdfr := lapply(.SD, function(z) stats::ecdf(z)(z)), .SDcols = "logBF", by = .(Day) ] %>%
+        mutate(Day=factor(Day)) %>%
+        dplyr::rename(., Subject=Subj)  %>%
+        as.data.table()
+  
+  # Overall results and Fig. 1G
+  Res.25.NoCx = MakeBFNoCx(DT.25.NoCx, paste0(NmRoo, "/25Chan_FolCx"))
+  Res.25.NoCx$Global
+  Res.25.NoCx$GrpDay
+```
+
+### Table S3) Individual Data of Fig.1G).  
+
+```{r TS3, warning=FALSE, message=FALSE}
+
+DT.25.NoCx[, .(Day,Subject,logBF) ]
+
+```
+
+***   
+
+# 2) Place field alignment to spatial geometry persists over days and predicts digging behavior  
+
+## **Figure 2. Place field alignment to spatial geometry persists over days.**   
+
+***   
+
+> **Figure 2.** Place field alignment to spatial geometry persists over days. A) Example place cell
+maps from two simultaneously recorded cells on day 3 from electrophysiology (left) and calciumimaging
+(right) recordings. B) Quantification of best match rotation (BMR) between trials for a cell.
+Place cells’ maps are compressed to squares (indicated by the dashed lines and arrow on top of
+each map) and compared across all trials to determine which rotation yields the highest
+correlation between each pair of maps. For each trial comparison, one of the maps is rotated 0°,
+90°, 180°, and 270°. The highest pixel to pixel cross-correlation between the non-rotated trial A
+map and rotated trial B map determines the BMR for that trial comparison. C) Distribution of bestmatch
+rotations across days using electrophysiological (N = 7 on day 1 and 6 on days 2 and 3,
+left) and calcium-imaging (N = 5, right) recordings, computed as the proportion of pairwise trial
+comparisons for which each rotation yielded the best match, averaged per animal. D) Schematic
+of heading prediction method using the center-out measure (see methods). For each place field,
+the angles from the center of the arena to the center of mass of the field was measured. The
+center-out measure from Corr (C, teal) and Geo (G, red) trials were used to train a Support Vector 
+Machine (SVM), leaving the trial to be predicted out (gray). E) Heading prediction accuracy using
+center-out measure. Histograms represent mean ± standard error of the mean (SEM), circles
+represent individual animal points. Red dashed line represents chance level (50%). Asterisks (*)
+indicate p < 0.05.   
+
+***   
+   
+### Fig.2C-left)  Distribution of bestmatch rotations across days using electrophysiological recordings {Design (3 Day x S) x (4 Rotaton x S)}  
+```{r F2C-L, warning=FALSE, message=FALSE}
+
+  NmRoo = paste0(DirPath,"/", "Fig2CLeft ")
+  Mk.dir(NmRoo)
+   
+  DT3 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/Tetrodes.RDS")))
+  DTp<-copy(DT3)
+  
+# Box Plot
+  ColPer=c("#D599D7", "#AA33B0","#700075")
+  Grp<- Grph.2023(
+    DatP = DTp,
+      Dvp="Proportion", VarX="Rotation",VarFill="Day",
+      LblsP =c("Cluster Quality", "","Percent Trial Pairs","Best Match Rotation"),
+      ylmP =c(0,.6),hLin = F,lvIp = 4,GrpSel = c(1:3),wMain=F,
+    TyGrp="Box", # Bar, Box, Violin, SplitViolin
+    Wthdot=T, Relleno=T, ResumAd=T,ColPer=ColPer
+  )
+  
+# Descriptive
+  DTRes<-DTp[,c(N = .N,as.list(summary(Proportion))), by=.(Rotation,Day)]
+  write.csv2(DTRes,paste0(NmRoo, "/Tetrodes_Descriptive.csv"))
+ 
+# AOV
+  a0 <- aov_ez("Subject", "Proportion", DTp,
+        within = c("Rotation","Day"))
+  
+  # Effect size & Mixed
+  eef<-effectsize::eta_squared(a0, generalized=TRUE)
+  Mod.1r<-lmer(Proportion~Day * Rotation + (1|Subject),data=DTp)
+      
+# Pos Hoc
+  # Defines orthogonal contrasts from a prioristic perspective
+  custom <- list(`0.180vs90.270` = c(1,-1, 1,-1),
+                       `0vs180` =  c(1, 0,-1, 0),
+                      `90vs270` =  c(0, 1, 0,-1)
+                   )
+                 
+  PosH.4w = PosHocAut(Mod.1r, Mod.1r, "Rotation", c("Rotation","emmean"), custom=custom)
+  <<ResCtrl1>> 
+```
+
+### Fig.2C-right)  Distribution of bestmatch rotations across days using calcium-imaging recordings {Design (3 Day x S) x (4 Rotaton x S)}  
+```{r Fig2C-R, warning=FALSE, message=FALSE}
+  
+  NmRoo = paste0(DirPath,"/", "Fig2CRight ")
+  Mk.dir(NmRoo)
+  
+  DT4 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/CalciumNormal.RDS")))
+  DTp<-copy(DT4)
+  
+# Box Plot
+  ColPer=c("#D599D7", "#AA33B0","#700075")
+  Grp<- Grph.2023(
+    DatP = DTp,
+      Dvp="Proportion", VarX="Rotation",VarFill="Day",
+      LblsP =c("Cluster Quality", "","Percent Trial Pairs","Best Match Rotation"),
+      ylmP =c(0,.6),hLin = F,lvIp = 4,GrpSel = c(1:3),wMain=F,
+    TyGrp="Box", # Bar, Box, Violin, SplitViolin
+    Wthdot=T, Relleno=T, ResumAd=T,ColPer=ColPer
+  )
+  
+# Descriptive
+  DTRes<-DTp[,c(N = .N,as.list(summary(Proportion))), by=.(Rotation,Day)]
+  write.csv2(DTRes,paste0(NmRoo, "/CalciumNormal_Descriptive.csv"))
+ 
+# AOV
+  a0 <- aov_ez("Subject", "Proportion", DTp,
+        within = c("Rotation","Day"))
+  
+  # Effect size & Mixed
+  eef<-effectsize::eta_squared(a0, generalized=TRUE)
+  Mod.1r<-lmer(Proportion~Day * Rotation + (1|Subject),data=DTp)
+  
+# Pos Hoc
+  # Defines orthogonal contrasts from a prioristic perspective
+  custom <- list(`0.180vs90.270` = c(1,-1, 1,-1),
+                       `0vs180` =  c(1, 0,-1, 0),
+                      `90vs270` =  c(0, 1, 0,-1)
+                   )
+                 
+  PosH.4w = PosHocAut(Mod.1r, Mod.1r, "Rotation", c("Rotation","emmean"), custom=custom)
+  <<ResCtrl1>> 
+```
+
+
