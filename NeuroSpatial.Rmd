@@ -630,7 +630,7 @@ MakeBFNoCx<-function(DTppp, Nmpp) {
     plot(Grp) # Exploratory Analysis
 ```
 
-# 1) Reorienting behavior in a two-context paradigm
+# **Results Section 1** Reorienting behavior in a two-context paradigm
 
 ## **Figure 1. Reorientation behavior in a two-context paradigm**
 
@@ -835,7 +835,7 @@ DT.25.NoCx[, .(Day,Subject,logBF) ]
 
 ------------------------------------------------------------------------
 
-# 2) Place field alignment to spatial geometry persists over days and predicts digging behavior
+# **Results Section 2** Place field alignment to spatial geometry persists over days and predicts digging behavior
 
 ## **Figure 2. Place field alignment to spatial geometry persists over days.**
 
@@ -933,7 +933,7 @@ DT.25.NoCx[, .(Day,Subject,logBF) ]
   <<ResCtrl1>> 
 ```
 
-# 3) Different CA1 cells display distinct context sensitivity
+# **Results Section 3** Different CA1 cells display distinct context sensitivity
 
 ## **Figure 3. Different CA1 cells display distinct context sensitivity.**
 
