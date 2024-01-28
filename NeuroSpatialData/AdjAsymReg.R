@@ -1,3 +1,4 @@
+# author: "Manuel Miguel Ramos Álvarez and the Muzzio Lab" 2024
 
 AdjMod.23.f<-function(LasMedP,TyLbl=NULL,xLb="X",yLb="Y",xmaxp=10,yminp=0,PIp=NULL,
                       LineRate=TRUE,pointXMed="p",pointXMedLb="OnAx",RootG=FALSE,MaxG=FALSE,InflG=FALSE) {
