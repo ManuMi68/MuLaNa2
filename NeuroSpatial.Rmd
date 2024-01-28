@@ -6,13 +6,13 @@ format:
   html:
     toc: true
     toc-location: left
-    toc-depth: 3
+    toc-depth: 4
     number-sections: true
     code-fold: true
     code-tools: true
     code-summary: "Code"
     code-overflow: scroll
-    theme: united
+    theme: cosmo
     page-layout: full
     grid:
       sidebar-width: 250px
@@ -23,6 +23,38 @@ editor: visual
 editor_options: 
   chunk_output_type: console
 ---
+
+```{r setup, include=FALSE}
+ library(knitr)
+ knitr::knit_hooks$set(optipng = knitr::hook_optipng)
+ knitr::opts_chunk$set(echo = TRUE,comment = NA,error=FALSE, warning = FALSE, message = FALSE, fig.show='hold',results='hold')
+```
+
+```{css, echo=FALSE}
+.watch-out {
+  background-color: #FFECEE;
+  border: 1px solid gray;
+}
+```
+
+```{css, echo=FALSE}
+.main-container {
+    max-height: 800px !important;
+    overflow-y: scroll !important;
+    overflow-x: auto !important;
+}
+
+pre {
+  max-height: 800px !important;
+  overflow-y: scroll !important;
+  overflow-x: auto !important;
+}
+pre code {
+  max-height: 800px !important;
+  overflow-y: scroll !important;
+  overflow-x: auto !important;
+}
+```
 
 # Preliminars: Packages, functions, and data preload
 
@@ -575,31 +607,38 @@ MakeBFNoCx<-function(DTppp, Nmpp) {
 
 ```
 
-```{r ResCtrl1, eval=F, echo=FALSE}
+```{r ResCtrl1, eval=F, echo=FALSE, comment=""}
     # Results
-    str(DTp) # Data File
-    kableTabl(DTp,"Data", "")
-    kableTabl(ezPrecis(DTp),"Design Structure", "")
-    plot(Grp) # Exploratory Analysis
-    kableTabl(DTRes,"Descriptive", "")
-    cat("Omnibus AOV")
-    a0
-    cat("Pos Hoc Simple Effects")
-    PosH.4w$PosHocMM
+    cat("Data Structure:\n");
+      str(DTp) # Data File
+    cat("---------------------\n");
+      kableTabl(DTp,"Data", "")
+    cat("---------------------\n");
+      kableTabl(ezPrecis(DTp),"Design Structure", "")
+    cat("---------------------\n");
+      kableTabl(DTRes,"Descriptive", "")
+    cat("Omnibus AOV:\n")
+      a0
+    cat("---------------------\n");
+    cat("Pos Hoc Simple Effects:\n")
+      PosH.4w$PosHocMM
     #kableTabl(PosH.4w$PosHocMM,"Pos Hoc Simple Effects", "")
+    cat("---------------------\n");
     kableTabl(PosH.4w$Means,"Descrptive & CI-95%", "")
-    
+    cat("---------------------\n");
+    cat("Exploratory Analysis:\n");
+    plot(Grp) # Exploratory Analysis
 ```
 
-# 1) Reorienting behavior in a two-context paradigm  
+# 1) Reorienting behavior in a two-context paradigm
 
 ## **Figure 1. Reorientation behavior in a two-context paradigm**
 
-***   
+------------------------------------------------------------------------
 
 > **Figure 1.** Reorientation behavior in a two-context paradigm. A) Schematic of experimental chambers showing reward location (yellow star) in Context A (left) and Context B (right). B) Schematic of session structure of two-context paradigm. Animals (N = 14) are disoriented before being placed in each context, in alternating order on 12 consecutive trials. C) Percentage of digs in each cup location on test trials on day 1 (left), day 2 (center), and day 3 (right). D) Boxplots showing distribution of digs in geometrically correct vs. incorrect axes in each context. E) Boxplots showing distribution of digs in each cup location combining both contexts. In all boxplots graphs, the boxes indicate the upper and lower quartiles of the data and the whiskers (extending lines) the minimum and maximum outside the quartiles. The horizontal line indicates the median. Dots represent individual data points and asterisks (\*) indicate p \< 0.05. F) Cumulative proportion of Bayes Factor (BF) on days 1 to 3 per context evaluating the alternative model (MAlt) that animals preferentially dug on a distinct rewarded axis in each context vs. the null model (Mnull) that animals dug by chance. G) Cumulative proportion of individual Bayes Factors (BF) across days 1 to 3 combining contexts evaluating the alternative model (MAlt) that animals increased digging in C locations with experience vs. the null model (Mnull) that animals dug by chance Conventional values showing the border marking credibility for Malt (log(BF) \> log(1/3)= 1.1) and Mnull (log(BF) \< log(1/3)= -1.1) are indicated by vertical dashed lines. The value of half (0.5) of the sample is marked by a horizontal dashed line.
 
-***   
+------------------------------------------------------------------------
 
 ### Fig 1D) Boxplots showing distribution of digs in geometrically correct vs. incorrect axes in each context {Design (2 Axis x S) x (3 Day x S) x (2 Context x S)}
 
@@ -688,7 +727,7 @@ MakeBFNoCx<-function(DTppp, Nmpp) {
   <<ResCtrl1>> 
 ```
 
-### Fig 1F) Cumulative proportion of Bayes Factor (BF) on days 1 to 3 per context  
+### Fig 1F) Cumulative proportion of Bayes Factor (BF) on days 1 to 3 per context
 
 ```{r F1F, warning=FALSE, message=FALSE}
   NmRoo = paste0(DirPath,"/", "Fig1F")
@@ -734,14 +773,14 @@ MakeBFNoCx<-function(DTppp, Nmpp) {
   Res.50$GrpDay$All
 ```
 
-### Table S2) Individual Data of Fig.1F)   
+### Table S2) Individual Data of Fig.1F)
+
 ```{r TS2, warning=FALSE, message=FALSE}
 
   DT.50[, .(Group,Day,Subject, logBF) ]
 ```
 
-
-### Fig 1G) Cumulative proportion of individual Bayes Factors (BF) across days 1 to 3 combining contexts  
+### Fig 1G) Cumulative proportion of individual Bayes Factors (BF) across days 1 to 3 combining contexts
 
 ```{r F1G, warning=FALSE, message=FALSE}
   NmRoo = paste0(DirPath,"/", "Fig1G")
@@ -786,7 +825,7 @@ MakeBFNoCx<-function(DTppp, Nmpp) {
   Res.25.NoCx$GrpDay
 ```
 
-### Table S3) Individual Data of Fig.1G).  
+### Table S3) Individual Data of Fig.1G).
 
 ```{r TS3, warning=FALSE, message=FALSE}
 
@@ -794,36 +833,20 @@ DT.25.NoCx[, .(Day,Subject,logBF) ]
 
 ```
 
-***   
+------------------------------------------------------------------------
 
-# 2) Place field alignment to spatial geometry persists over days and predicts digging behavior  
+# 2) Place field alignment to spatial geometry persists over days and predicts digging behavior
 
-## **Figure 2. Place field alignment to spatial geometry persists over days.**   
+## **Figure 2. Place field alignment to spatial geometry persists over days.**
 
-***   
+------------------------------------------------------------------------
 
-> **Figure 2.** Place field alignment to spatial geometry persists over days. A) Example place cell
-maps from two simultaneously recorded cells on day 3 from electrophysiology (left) and calciumimaging
-(right) recordings. B) Quantification of best match rotation (BMR) between trials for a cell.
-Place cells’ maps are compressed to squares (indicated by the dashed lines and arrow on top of
-each map) and compared across all trials to determine which rotation yields the highest
-correlation between each pair of maps. For each trial comparison, one of the maps is rotated 0°,
-90°, 180°, and 270°. The highest pixel to pixel cross-correlation between the non-rotated trial A
-map and rotated trial B map determines the BMR for that trial comparison. C) Distribution of bestmatch
-rotations across days using electrophysiological (N = 7 on day 1 and 6 on days 2 and 3,
-left) and calcium-imaging (N = 5, right) recordings, computed as the proportion of pairwise trial
-comparisons for which each rotation yielded the best match, averaged per animal. D) Schematic
-of heading prediction method using the center-out measure (see methods). For each place field,
-the angles from the center of the arena to the center of mass of the field was measured. The
-center-out measure from Corr (C, teal) and Geo (G, red) trials were used to train a Support Vector 
-Machine (SVM), leaving the trial to be predicted out (gray). E) Heading prediction accuracy using
-center-out measure. Histograms represent mean ± standard error of the mean (SEM), circles
-represent individual animal points. Red dashed line represents chance level (50%). Asterisks (*)
-indicate p < 0.05.   
+> **Figure 2.** Place field alignment to spatial geometry persists over days. A) Example place cell maps from two simultaneously recorded cells on day 3 from electrophysiology (left) and calciumimaging (right) recordings. B) Quantification of best match rotation (BMR) between trials for a cell. Place cells' maps are compressed to squares (indicated by the dashed lines and arrow on top of each map) and compared across all trials to determine which rotation yields the highest correlation between each pair of maps. For each trial comparison, one of the maps is rotated 0°, 90°, 180°, and 270°. The highest pixel to pixel cross-correlation between the non-rotated trial A map and rotated trial B map determines the BMR for that trial comparison. C) Distribution of bestmatch rotations across days using electrophysiological (N = 7 on day 1 and 6 on days 2 and 3, left) and calcium-imaging (N = 5, right) recordings, computed as the proportion of pairwise trial comparisons for which each rotation yielded the best match, averaged per animal. D) Schematic of heading prediction method using the center-out measure (see methods). For each place field, the angles from the center of the arena to the center of mass of the field was measured. The center-out measure from Corr (C, teal) and Geo (G, red) trials were used to train a Support Vector Machine (SVM), leaving the trial to be predicted out (gray). E) Heading prediction accuracy using center-out measure. Histograms represent mean ± standard error of the mean (SEM), circles represent individual animal points. Red dashed line represents chance level (50%). Asterisks (\*) indicate p \< 0.05.
 
-***   
-   
-### Fig.2C-left)  Distribution of bestmatch rotations across days using electrophysiological recordings {Design (3 Day x S) x (4 Rotaton x S)}  
+------------------------------------------------------------------------
+
+### Fig.2C-left) Distribution of bestmatch rotations across days using electrophysiological recordings {Design (3 Day x S) x (4 Rotaton x S)}
+
 ```{r F2C-L, warning=FALSE, message=FALSE}
 
   NmRoo = paste0(DirPath,"/", "Fig2CLeft ")
@@ -866,7 +889,8 @@ indicate p < 0.05.
   <<ResCtrl1>> 
 ```
 
-### Fig.2C-right)  Distribution of bestmatch rotations across days using calcium-imaging recordings {Design (3 Day x S) x (4 Rotaton x S)}  
+### Fig.2C-right) Distribution of bestmatch rotations across days using calcium-imaging recordings {Design (3 Day x S) x (4 Rotaton x S)}
+
 ```{r Fig2C-R, warning=FALSE, message=FALSE}
   
   NmRoo = paste0(DirPath,"/", "Fig2CRight ")
@@ -909,4 +933,203 @@ indicate p < 0.05.
   <<ResCtrl1>> 
 ```
 
+# 3) Different CA1 cells display distinct context sensitivity
 
+## **Figure 3. Different CA1 cells display distinct context sensitivity.**
+
+------------------------------------------------------------------------
+
+> **Figure 3.** Different CA1 cells display distinct context sensitivity. A) Possibilities of neural representations of context recognition. In possibility 1 (left panel) cells align to geometry within each context but display location remapping across context. In possibility 2 (right panel) some cells display identical alignment in both contexts, showing insensitivity to the featural information that distinguish the chambers, while another group of cells show distinct geometric alignment within each chamber but display location remapping across contexts. B) Schematic of map alignment procedure. Since place fields in disoriented animals align to the geometry of the chamber, each cells' maps are first aligned to the same orientation across trials by selecting the rotation (0° or 180°) of each map that yielded the maximal similarity within each context. Then, an average map of each aligned context is calculated, and the average maps are aligned relative to each other. The comparison that yields the highest correlation is defined as the measure of context similarity. In the schematic, the transparent rotated map shows the lowest similarity score and, therefore, the non-rotated map is selected for alignment. C) Distribution of context similarity scores across context for all cells (n = 2669). The distribution shows a strong leftward skewness, indicating that although spatial maps are highly similar across contexts for most place cells, a moderate proportion of cells remap across contexts (e.g., cells exhibit shifts in their preferred firing locations). A cut-off value of 0.3 was used to separate cells based on context similarity. This value was validated by dividing the context similarity distribution in deciles and evaluating mean correlation corresponding to each decile using a modeling approach (Figure S4). Cells with context similarity equal or below 0.3 were defined as Feature-Sensitive (FS) and cells with context similarity above 0.3 were defined as Feature-Insensitive (FI). D) Proportion of FI and FS cells recorded on day 1 (n = 925), day 2 (n = 915 cells), and day 3 (n = 829). E) Examples of average aligned maps of FI (left) and FS (right) cells from electrophysiology (top) and calcium-imaging (bottom) recordings, along with the corresponding context similarity measures. FI cells show an average context similarity of 0.654 ± 0.003 and FS cells show an average context similarity of 0.160 ± 0.006 (M ± SEM).
+
+> **Figure S4.** Complement of Figure 3. Validation of remapping threshold. A. Scatterplots showing average correlations within and across context for individual cells separated in deciles obtained from the similarity distribution shown in Figure 3C. B. Asymptotic regression model of the overall correlation decile function. The red dot indicates the half life of the function, which coincides with decile 1 (correlations across context between 0 and 0.3) and the root of the function (value that makes the function 0 on the y axis). Finally, in the asymptotic regression model, the relative growth rate is not constant. It attains its peak when Y = 0 and diminishes as Y increases. This suggests that Decile 1, corresponding to Y = 0, represents the point at which the rate of change is maximized. This indicates that that the first decile is the most informative to discriminate across context (Modeling method detailed in the next page).
+
+------------------------------------------------------------------------
+
+### Fig.S4A) Validation of remapping threshold. Scatterplots showing average correlations within and across context
+
+```{r FS4A}
+
+  NmRoo = paste0(DirPath,"/", "FigS4_ForFig3")
+  Mk.dir(NmRoo)
+  
+  DT5 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/CalcTetrodePairwiseCorr.RDS")))
+  DTp<-copy(DT5)
+  
+  # Correlation Bt-Wit
+  Efs<-DTp[,cor(avgWithinCorrelation,avgAcrossCorrelation),by=.(Decile)]
+  setkey(Efs,Decile)
+  names(Efs)<-c("X", "Y")
+  cat("Within and across context correlation:\n");
+    Efs
+  cat("---------------------\n");
+  
+  Decil.Labs <- c( "1"= "Decile 1 (.00 < bestCorr <= .30",
+                  "2"= "Decile 2 (.30 < bestCorr <= .42",
+                  "3"= "Decile 3 (.42 < bestCorr <= .51",
+                  "4"= "Decile 4 (.51 < bestCorr <= .58",
+                  "5"= "Decile 5 (.58 < bestCorr <= .64",
+                  "6"= "Decile 6 (.64 < bestCorr <= .69",
+                  "7"= "Decile 7 (.69 < bestCorr <= .75",
+                  "8"= "Decile 8 (.75 < bestCorr <= .80",
+                  "9"= "Decile 9 (.80 < bestCorr <= .86",
+                  "10"= "Decile 10 (.86 < bestCorr <= 1.00"
+                  )
+  Decil_labeller <- function(variable,value){return(Decil.Labs[value])}
+  
+  forLab<-data.frame(Decile=Efs$X,avgWithinCorrelation=.1,avgAcrossCorrelation=.9,Label=paste("R = ",round(Efs$Y,2)))
+  g1<-ggplot2::ggplot(data=DTp, aes(x=avgWithinCorrelation, y=avgAcrossCorrelation, color=factor(Decile)))
+  g2<- g1 + scale_color_manual(values=decilecolors) + geom_point() + facet_wrap(~Decile, nrow=2, 
+                                      labeller = labeller(Decile=Decil.Labs)) + theme_bw_MM() + 
+    theme(legend.position="none") + geom_smooth(method = "lm", se = FALSE,col="gray40") +
+     labs(x="Average Pair-wise Within Correlation", y="Average Pair-wise Across Correlation") +
+    geom_text(data = forLab, mapping = aes(label = Label), col="black")
+ 
+  ggsave(paste0(NmRoo,"/FigSuppl Graph Reg Deciles.pdf"), g2, width=12, height=6)
+  
+  
+  cat("Fig.S4A) Scatterplots showing average correlations within and across context:\n")
+    g2
+```
+
+### Fig.S4B) Validation of remapping threshold. Asymptotic regression model of the overall correlation decile function
+
+The Asymptotic Regression model (hereinafter AsymReg) is used to model a response y that approaches a horizontal asymptote as x tend to infinity (see Original article: [Stevens, W. L., 1951, Asymptotic Regression. *Biometrics*, *7*(3), 247--267. https://doi.org/10.2307/3001809](https://doi.org/10.2307/3001809)), also known as the Mitscherlich law in agriculture and as the von Bertalanffy law in fisheries research or Monomolecular Growth.\
+We are going to focus on the model as defined in the `SSasymp` function of the R'nls library (see pages 511-512 on [Pinheiro, J.C. and Bates, D.M., 2000, Mixed-effects models in S and Splus. Springer](https://github.com/ManuMi68/MuLaNa2/blob/main/NeuroSpatialData/AppendixPinheiroBates2000.pdf): `Asymreg1<-formula(Y~Asym+(R0-Asym)*exp(-exp(lrc)*X))`.\
+The model parameters are:
+
+-   `Asym` 𝜙~1~: The horizontal asymptote on the right side (very large values of `input`).
+
+-   `R0` 𝜙~2~: The response when `input` is zero.
+
+-   `R0` 𝜙~3~: The natural logarithm of the rate constant.
+
+We have created the function, [`AdjMod.23.f`](https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/AdjAsymReg.R), to systematize all computations related to the AsymReg Model.
+
+```{r FS4B}
+
+  NmRoo = paste0(DirPath,"/", "FigS4_ForFig3")
+  Mk.dir(NmRoo)
+  DT5 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/CalcTetrodePairwiseCorr.RDS")))
+  DTp<-copy(DT5)
+  
+  # Correlation Bt-Wit
+  Efs<-DTp[,cor(avgWithinCorrelation,avgAcrossCorrelation),by=.(Decile)]
+  setkey(Efs,Decile)
+  names(Efs)<-c("X", "Y")
+  
+  # Base model
+  fit <- NULL
+  try(fit <- nls(Y ~ SSasymp(X, Asym, R0, lrc), data=Efs, trace = TRUE,control = list(maxiter = 500)))
+  
+  # Eq0 is the fundamental equation of the model, verified, from which all the rest is derived
+  Eq0.a=quote(response)
+  Eq0.b=quote(Asym+(R0-Asym)*exp(-exp(lrc)*input))
+  Eq0=substitute(a ~ b , list(a = Eq0.a, b = Eq0.b))
+  Eq0= as.expression(Eq0)
+  EqTheta = ChangeSymbAR(EqQuo = Eq0,SymRes = c("theta[1]", "theta[2]", "theta[3]"))
+  EqCDR = ChangeSymbAR(Eq0,letters[seq(1, 3)],c("Asym","R0","exp(lrc)"))
+  EqTheta2 = ChangeSymbAR(EqQuo = Eq0,SymRes = c("Asymptote", "Origin", "LogRate"),LaX = "Decile",LaY="Correlation")
+  EqTt.1=quote({"Asymptotic Regression:"})
+  Eq.1=quote({f[theta](x) == theta[1] + (theta[2]-theta[1])*~e^{-e^{theta[3]}*~x}})
+  EqLb.1=substitute(a ~ b , list(a = EqTt.1, b = Eq.1))
+  EqTt.2=quote({"First derivative:"})
+  Eq.2=quote({f*" '"[theta](x) == {e^{theta[3]}*~(theta[1]-f[theta](x))}})
+  EqLb.2=substitute(a ~ b , list(a = EqTt.2, b = Eq.2))
+  EqTt.3=quote({"Params:"})
+  Eq.3=quote(list(theta[1] == "Asymptote", theta[2] == "Origin", theta[3] == "Log of Rate")~"["*{Rate==e^{theta[3]}}*"]")
+  EqLb.3=substitute(a ~ b , list(a = EqTt.3, b = Eq.3))
+  JnEq=list(EqLb.1,EqLb.2,EqLb.3)
+ 
+  cat("Asymptotic regression model of the overall correlation decile function:\n")
+  RsM1<-AdjMod.23.f(LasMedP=Efs, TyLbl=JnEq, xLb="Decile",yLb="Pearson's Correlation", xmaxp=10,yminp=-1)
+  pdf(paste0(NmRoo,"/FigSuppl Graph AsymReg.pdf"),width = 6,height = 6)
+        AdjMod.23.f(LasMedP=Efs, TyLbl=JnEq, xLb="Decile",yLb="Pearson's Correlation", xmaxp=10,yminp=-1)
+  dev.off()
+  
+  cat("Table S4: Details of model fit Asymptotic regression:\n" )
+  RsM1$forAPA2
+  MkKblMod(RsM1,NmRoo,"",EqTheta2)
+  cat("Half-life stimation from Asymptotic Regression (xMed=log(2)/(exp(lrcStim)):\n" )
+  RsM1$Par
+  cat("Root Value from Taylor Polynomial:\n" )
+  RsM1$root
+ 
+  
+```
+
+#### Fig.S4B) The relative growth rate in the Asymptotic regression model
+
+Due to its biological meaning, the most widespread parameterisation of AsymReg is:   
+Y=a−(a−b)exp(−cX) where a is the maximum attainable Y, b is Y at x=0   
+and c is proportional to the relative rate of Y increase while X increases.   
+Indeed, we can see that the first derivative is  
+\[D(expression(a - (a - b) \* exp (- c \* X)), "X")\]:   
+(a - b) \* (exp(-c \* X) \* c); that is  
+Y′=c(a−Y)  
+
+This conclusion is demonstrated as follows:   
+Y = Asym + (R0 - Asym) \* exp(-exp(lrc) \* X)  
+Y'= -((R0 - Asym) \* (exp(-exp(lrc) \* X) \* exp(lrc)))  
+c = exp(lrc)   
+-   Y = Asym + `(R0 - Asym) * exp(-c * X)` = Asym + D  
+-   D = Y - Asym  
+-   Y' = -((R0 - Asym) \* (exp(-c \* X) \* c ))  
+-   Y' = (-1)\* (R0 - Asym) \* exp(-c \* X) \* c  
+-   Y'/-c = (R0 - Asym) \* exp(-c \* X)  
+-   Y'/-c = Y - Asym  
+-   Y' = -c \* (Y-Asym) = c \* (Asym - Y)  
+-   Proved: Y′=c(a−Y); taking into account that `a` refers to `Asym` (the Asymptote or plateau).   
+
+The first derivative of a function gives the expression for the line tangent to the curve of the function. This expression allows us to find the instantaneous rate of change at any point on the curve.
+
+**We will now show that the relative growth rate in the asymptotic regression model (first derivative) is not constant, reaching its maximum value when Y = 0 and decreasing as Y increases.**\*
+
+That is, the absolute ratio of increase of Y at a given X is not constant, but depends on the attained value of Y: $\displaystyle \frac{\partial Y}{\partial X} = c(a-Y)$.  
+And, for the relative rate of increase of Y, we see that: $\displaystyle \frac{\partial Y}{\partial X} \frac{1}{Y} = c\frac{(a-Y)}{Y}$.  
+It means that the relative rate of increase of Y is maximum at the beginning and approaches 0 when Y approaches the Asymptote `a`.
+
+```{r, results='asis', fig.show='asis'}
+  cat("1)  In the first place we extract the parameters, and other values of interest, of the AsymReg model from the variable **fit**\n")
+  XMax=tail(Efs$X,1)
+  xPred <- seq(0, XMax, length = 1000);
+  theta1=a=Asymptote= Asym=AsymStim=coefficients(fit)[[1]]
+  theta2=b=Origin=    R0=R0Stim=coefficients(fit)[[2]]
+  theta3=LogRate=     lrc=lrcStim=coefficients(fit)[[3]]
+  xMed=log(2)/(exp(lrcStim))
+  PredxMed=predict(fit, data.frame(X = xMed))
+  Rate=c=             exp(lrcStim)
+  
+  cat(paste0("theta1 =",theta1,"\n"));
+  cat(paste0("theta2 =",theta2,"\n"))
+  cat(paste0("theta3 =",theta3,"\n"))
+  cat(paste0("Half-life =",xMed,"\n"))
+  cat(paste0("Rate =",Rate,"\n"))
+  
+  cat("2) Now, we represent the values predicted by the AsymReg model\n")
+  PredMod=predict(fit, data.frame(X = xPred))
+  plot(xPred, PredMod,lty=1,lwd=3,type="l")  
+  
+  
+  cat("3) We get the relative growth rate in the AsymReg Model\n
+      from the first derivative (`DrvAsymReg` function), estimate for the Decile 1 value.\n
+      and plot them on a graph\n")
+  newx <- 1
+    pred0 <- data.frame(x=newx, y=AsymRegMM(newx,AsymStim,R0Stim,c))
+    pred1 <- data.frame(x=newx, y=DrvAsymReg(newx,AsymStim,R0Stim,c))
+    yint <- pred0$y - (pred1$y*newx)
+    xint <- -yint/pred1$y
+    lines(xPred, yint + pred1$y*xPred, lty=2,lwd=2, col="red") # tangent (1st deriv. of spline at newx)
+
+    
+  cat("4) We repeat these rate estimates for the rest of the Deciles (from 2 to 10)\n
+      and incorporate these estimates in the graph\n")
+  for (newx in 2:10)  {
+        pred0 <- data.frame(x=newx, y=AsymRegMM(newx,AsymStim,R0Stim,c))
+        pred1 <- data.frame(x=newx, y=DrvAsymReg(newx,AsymStim,R0Stim,c))
+        yint <- pred0$y - (pred1$y*newx)
+        xint <- -yint/pred1$y
+        lines(xPred, yint + pred1$y*xPred, lty=2,lwd=1) # tangent (1st deriv. of spline at newx)
+        }
+```
+
+It can be seen that the straight line with the point at which the rate of change is maximized (red color) is that which corresponds to the Decile 1, when Y = 0.   
