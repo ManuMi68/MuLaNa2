@@ -1059,33 +1059,35 @@ We have created the function, [`AdjMod.23.f`](https://github.com/ManuMi68/MuLaNa
 
 #### Fig.S4B) The relative growth rate in the Asymptotic regression model
 
-Due to its biological meaning, the most widespread parameterisation of AsymReg is:   
-Y=a−(a−b)exp(−cX) where a is the maximum attainable Y, b is Y at x=0   
-and c is proportional to the relative rate of Y increase while X increases.   
-Indeed, we can see that the first derivative is  
-\[D(expression(a - (a - b) \* exp (- c \* X)), "X")\]:   
-(a - b) \* (exp(-c \* X) \* c); that is  
-Y′=c(a−Y)  
+Due to its biological meaning, the most widespread parameterisation of AsymReg is:\
+Y=a−(a−b)exp(−cX) where a is the maximum attainable Y, b is Y at x=0\
+and c is proportional to the relative rate of Y increase while X increases.\
+Indeed, we can see that the first derivative is\
+\[D(expression(a - (a - b) \* exp (- c \* X)), "X")\]:\
+(a - b) \* (exp(-c \* X) \* c); that is\
+Y′=c(a−Y)
 
-This conclusion is demonstrated as follows:   
-Y = Asym + (R0 - Asym) \* exp(-exp(lrc) \* X)  
-Y'= -((R0 - Asym) \* (exp(-exp(lrc) \* X) \* exp(lrc)))  
-c = exp(lrc)   
--   Y = Asym + `(R0 - Asym) * exp(-c * X)` = Asym + D  
--   D = Y - Asym  
--   Y' = -((R0 - Asym) \* (exp(-c \* X) \* c ))  
--   Y' = (-1)\* (R0 - Asym) \* exp(-c \* X) \* c  
--   Y'/-c = (R0 - Asym) \* exp(-c \* X)  
--   Y'/-c = Y - Asym  
--   Y' = -c \* (Y-Asym) = c \* (Asym - Y)  
--   Proved: Y′=c(a−Y); taking into account that `a` refers to `Asym` (the Asymptote or plateau).   
+This conclusion is demonstrated as follows:\
+Y = Asym + (R0 - Asym) \* exp(-exp(lrc) \* X)\
+Y'= -((R0 - Asym) \* (exp(-exp(lrc) \* X) \* exp(lrc)))\
+c = exp(lrc)\
+- Y = Asym + `(R0 - Asym) * exp(-c * X)` = Asym + D\
+- D = Y - Asym\
+- Y' = -((R0 - Asym) \* (exp(-c \* X) \* c ))\
+- Y' = (-1)\* (R0 - Asym) \* exp(-c \* X) \* c\
+- Y'/-c = (R0 - Asym) \* exp(-c \* X)\
+- Y'/-c = Y - Asym\
+- Y' = -c \* (Y-Asym) = c \* (Asym - Y)\
+- Proved: Y′=c(a−Y); taking into account that `a` refers to `Asym` (the Asymptote or plateau).
 
 The first derivative of a function gives the expression for the line tangent to the curve of the function. This expression allows us to find the instantaneous rate of change at any point on the curve.
 
 **We will now show that the relative growth rate in the asymptotic regression model (first derivative) is not constant, reaching its maximum value when Y = 0 and decreasing as Y increases.**\*
 
-That is, the absolute ratio of increase of Y at a given X is not constant, but depends on the attained value of Y: $\displaystyle \frac{\partial Y}{\partial X} = c(a-Y)$.  
-And, for the relative rate of increase of Y, we see that: $\displaystyle \frac{\partial Y}{\partial X} \frac{1}{Y} = c\frac{(a-Y)}{Y}$.  
+That is, the absolute ratio of increase of Y at a given X is not constant, but depends on the attained value of Y:\
+$$\displaystyle \frac{\partial Y}{\partial X} = c(a-Y)$$\
+And, for the relative rate of increase of Y, we see that:\
+$$\displaystyle \frac{\partial Y}{\partial X} \frac{1}{Y} = c\frac{(a-Y)}{Y}$$\
 It means that the relative rate of increase of Y is maximum at the beginning and approaches 0 when Y approaches the Asymptote `a`.
 
 ```{r, results='asis', fig.show='asis'}
@@ -1132,4 +1134,58 @@ It means that the relative rate of increase of Y is maximum at the beginning and
         }
 ```
 
-It can be seen that the straight line with the point at which the rate of change is maximized (red color) is that which corresponds to the Decile 1, when Y = 0.   
+It can be seen that the straight line with the point at which the rate of change is maximized (red color) is that which corresponds to the Decile 1, when Y = 0.
+
+### Fig.S7) Properties of FI and FS cells
+
+> **Figure S7.** Complement of Figure 3. Properties of FI and FS cells. Spatial information content of FS and FI cells. To determine if FS and FI displayed the same spatial quality a robust 2-way ANOVA was conducted on the spatial information content, with day of testing (day 1 to 3) and Cell type (FI and FS) as between' factors. Results revealed a main effect of day \[Fw(2) = 15.57, p = 0.001, 𝛏 =0.17\], as well as an interaction between day and stability \[Fw(2) = 6.56, p = 0.044, 𝛏 =0.17\], but no effect of Cell Type \[F\<1\]. Post hoc analyses using Robust Rom's multiple comparisons showed a difference in FI cells between days 1 and 2 \[p \< .001; 𝛏 =0.26\] and days 1 and 3 \[p \< .001 𝛏 =0.19\], but not between days 2 and 3 \[p\>.05; 𝛏 =0.08\]. For FS cells, there were no differences across days (p\>.05). Importantly, there were no differences between FI and FS on any testing day (p\>.05). Spatial information from calcium traces was calculated using the method developed for calcium traces by Climer and Dombeck, 2021, based on Skaggs et al., 1993. Spatial information was calculated using the following formula:
+>
+> ![](images/EqFigS7.png){width="125"}
+>
+> Where f is the mean change in fluorescence, fi is the mean change in fluorescence in a bin, pX(xi) is the probability that the animal is in the ith spatial bin during a time sample. For each cell, we made 2 matrices of binned data, one for the probability of the animal position, p\[x,y\], and one for the binned calcium trace, f \[x,y\]. Both maps were smoothed. We then computed the equation shown above, which gave one spatial information value per cell.
+>
+> References: Climer, J.R., Dombeck, D.A. Information theoretic approaches to deciphering the neural code with functional fluorescence imaging, eNeuro.0266-21.2021. Skaggs WE, McNaughton BL, Gothard KM (1993) An information theoretic approach to deciphering the hippocampal code 1030--1037. In: Advances in neural information processing systems 5, Hanson SJ, Cowan JD, Giles CL, eds). Burlington: Morgan-Kaufmann.
+
+```{r FS7}
+
+  NmRoo = paste0(DirPath,"/", "FigS7")
+  Mk.dir(NmRoo)
+  
+  DT6 <- readRDS(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/SpatialInformationContent.RDS")))
+  DTp<-copy(DT6)
+  
+  IdSj="Subject";wv1="CellType";wv2="Day";LaVd="Perc"
+  DTp2 <- copy(DTp) %>% 
+    dplyr::rename(x1=all_of(wv1)) %>% 
+    dplyr::rename(x2=all_of(wv2)) %>%
+    dplyr::rename(y=all_of(LaVd)) %>%
+    mutate(x1=factor(x1)) %>%
+    mutate(x2=factor(x2)) %>%
+    mutate(Inter:=factor(interaction(x1,x2))) %>%
+    setkey(.,Inter)
+  
+  NumL=length(levels(DTp2$Inter)); vector=c(1:NumL)
+  lv1=length(levels(DTp2$x1));lv2=length(levels(DTp2$x2))
+
+  # Data structure as lists for Wilcox functions
+  ArP=lapply(1:NumL, function (x) DTp2[.(levels(DTp2$Inter)[x]),"y",with=F][[1]])
+  
+  A=lv2;B=lv1;Prc=2 #A=3;B=2
+  # Wilcox Robust ANOVA: t2way
+  RsRb<-t2way(A,B,ArP)
+  
+  # Approximation to estimate Robust Effect Size  
+  TamA=round(mean(ESmainMCP(A,B,ArP)$Factor.A[,3]),Prc)
+	TamB=round(mean(ESmainMCP(A,B,ArP)$Factor.B[,3]),Prc)
+	TamInt=round(mean(esImcp(A,B,ArP)$Effect.Sizes),Prc)
+  TamJn <- c(TamA,TamB,TamInt)
+  
+  ExFinAOV<-data.table(Names=c("Day","CellType","Day*CellType"),
+                       data.table(Q=with(RsRb, round(c(Qa, Qb, Qab),Prc)),
+                                  p=with(RsRb, round(c(A.p.value, B.p.value,AB.p.value),4)),
+                                  EffSize=TamJn,
+                                  Size= unlist(lapply(TamJn, InterpExplana))))
+  cat("Robust ANOVA:\n")
+  ExFinAOV
+```
+
