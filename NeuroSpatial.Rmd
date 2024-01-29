@@ -773,6 +773,22 @@ MakeBFNoCx<-function(DTppp, Nmpp) {
   Res.50$GrpDay$All
 ```
 
+### Table S1) Complement of Figure 1. Individual data points corresponding to Figure 1C showing percent of digs in each cup per context
+
+```{r}
+    # To obtain the percentages data  
+    DTPerc<- data.table(copy(DT.BF)) %>%
+          .[, data.table(table(Subj,Day,Dig)),by=Group] %>%
+          .[,Perc:=percent(N/sum(N)),by=list(Group,Subj,Day)] %>%
+          mutate(N=NULL)  %>%
+          data.table()
+   # To obtain the percentages data in wide format   
+    DTFPivot<-DTPerc %>%
+          pivot_wider(names_from = c(Dig, Group), values_from = Perc, names_vary = "slowest")
+    kableTabl(DTFPivot,"percent of digs in each cup per context", "Table S1. Complement of Figure 1")
+    write.csv2(DTFPivot,paste0(NmRoo,"/DigPercents.csv"))
+```
+
 ### Table S2) Individual Data of Fig.1F)
 
 ```{r TS2, warning=FALSE, message=FALSE}
@@ -1085,9 +1101,12 @@ The first derivative of a function gives the expression for the line tangent to 
 **We will now show that the relative growth rate in the asymptotic regression model (first derivative) is not constant, reaching its maximum value when Y = 0 and decreasing as Y increases.**\*
 
 That is, the absolute ratio of increase of Y at a given X is not constant, but depends on the attained value of Y:\
-$$\displaystyle \frac{\partial Y}{\partial X} = c(a-Y)$$\
-And, for the relative rate of increase of Y, we see that:\
-$$\displaystyle \frac{\partial Y}{\partial X} \frac{1}{Y} = c\frac{(a-Y)}{Y}$$\
+![](images/EqFigS4Ba.png){width="125"}
+
+And, for the relative rate of increase of Y, we see that:
+
+![](images/EqFigS4Bb.png){width="125"}
+
 It means that the relative rate of increase of Y is maximum at the beginning and approaches 0 when Y approaches the Asymptote `a`.
 
 ```{r, results='asis', fig.show='asis'}
@@ -1188,4 +1207,3 @@ It can be seen that the straight line with the point at which the rate of change
   cat("Robust ANOVA:\n")
   ExFinAOV
 ```
-
