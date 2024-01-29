@@ -1,0 +1,13 @@
+Robust ANOVA:
+          Names     Q     p EffSize       Size
+1:          Day 15.57 0.001    0.17      Small
+2:     CellType  0.28 0.597    0.07 Very small
+3: Day*CellType  6.56 0.044    0.17      Small
+-------------------------
+Robust Pos Hoc Simple Effect of Day on each CellType:
+[1] "FI: Day 1 - Day 2 = 6.03: tw(834.2) = 6.52; pROM = 0; 𝛏 =0.26 (Small effect)"            
+[2] "FI: Day 1 - Day 3 = 4.37: tw(677.07) = 4.41; pROM = 0; 𝛏 =0.19 (Small effect)"           
+[3] "FI: Day 2 - Day 3 = -1.66: tw(605.56) = 1.73; pROM = 0.0837; 𝛏 =0.08 (Very small effect)"
+[4] "FS: Day 1 - Day 2 = 3.18: tw(103.24) = 1.36; pROM = 0.3538; 𝛏 =0.15 (Small effect)"      
+[5] "FS: Day 1 - Day 3 = -3.75: tw(51.16) = 1.24; pROM = 0.3538; 𝛏 =0.17 (Small effect)"      
+[6] "FS: Day 2 - Day 3 = -6.92: tw(47.05) = 2.33; pROM = 0.0712; 𝛏 =0.32 (Small effect)"      
