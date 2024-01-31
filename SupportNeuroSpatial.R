@@ -576,24 +576,24 @@
     summary
   }
   
-  ResCtrl1 <- function() {
+  ResCtrl1p <- function() {
     # Results
     cat("Data Structure:\n");
     str(DTp) # Data File
     cat("---------------------\n");
-    kableTabl(DTp,"Data", "")
+    print(kableTabl(DTp,"Data", ""))
     cat("---------------------\n");
-    kableTabl(ezPrecis(DTp),"Design Structure", "")
+    print(kableTabl(ezPrecis(DTp),"Design Structure", ""))
     cat("---------------------\n");
-    kableTabl(DTRes,"Descriptive", "")
+    print(kableTabl(DTRes,"Descriptive", ""))
     cat("Omnibus AOV:\n")
-    a0
+    print(a0)
     cat("---------------------\n");
     cat("Pos Hoc Simple Effects:\n")
-    PosH.4w$PosHocMM
+    print(PosH.4w$PosHocMM)
     #kableTabl(PosH.4w$PosHocMM,"Pos Hoc Simple Effects", "")
     cat("---------------------\n");
-    kableTabl(PosH.4w$Means,"Descrptive & CI-95%", "")
+    print(kableTabl(PosH.4w$Means,"Descrptive & CI-95%", ""))
     cat("---------------------\n");
     cat("Graphics have been preloaded to avoid page overload\n (see the corresponding section for details).:\n");
     # plot(Grp) # Exploratory Analysis
