@@ -576,7 +576,7 @@
     summary
   }
   
-  ResCtrl1p <- function() {
+  ResCtrl1p <- function(DTp, DTRes, a0, PosH.4w) {
     # Results
     cat("Data Structure:\n");
     str(DTp) # Data File
