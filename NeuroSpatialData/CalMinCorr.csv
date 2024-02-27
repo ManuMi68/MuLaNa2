@@ -1,4 +1,4 @@
-"";"Subject";"Context";"Day";"Stability";"Coher";"bmr";"N";"Ntt";"Perc";"animal";"trialA";"trialB";"contextA";"contextB";"isCoherent";"rot1";"rot2";"rot3";"rot4"
+"";"Subject";"Context";"Day";"CellType";"BMROrder";"bmr";"N";"Ntt";"Perc";"animal";"trialA";"trialB";"contextA";"contextB";"isCoherent";"rot1";"rot2";"rot3";"rot4"
 "1";"CMG129_CA1_TA1_TB10";"across";"3";"FI";"C_3";"1";30;123;0,24390243902439;"CMG129_CA1";1;10;1;2;1;0,317;0,293;0,244;0,146
 "2";"CMG129_CA1_TA1_TB10";"across";"3";"FI";"C_4";"2";18;123;0,146341463414634;"CMG129_CA1";1;10;1;2;1;0,317;0,293;0,244;0,146
 "3";"CMG129_CA1_TA1_TB10";"across";"3";"FI";"C_1";"3";39;123;0,317073170731707;"CMG129_CA1";1;10;1;2;1;0,317;0,293;0,244;0,146
