@@ -598,3 +598,115 @@
     cat("Graphics have been preloaded to avoid page overload\n (see the corresponding section for details).:\n");
     # plot(Grp) # Exploratory Analysis
   }
+  
+  InterP2 <- function(x) {
+    dplyr::case_when(
+      x <= .001   ~ "***",
+      x <= .01    ~ "** ",
+      x <= .05    ~ "*  ",
+      x <  .07     ~ "#  ",
+      .default =    "   ")
+  }
+  
+  MkMtrSig <-function(lv1=2,lv2=4) {
+    NmLev=lapply (1:lv1, function(ii) paste0("C",ii,".",1:lv2))
+    MtrL=matrix("",nrow = lv2+1,ncol=lv2+1)
+    rownames(MtrL) <-c(NmLev[[1]],"Marg")
+    colnames(MtrL) <-c(NmLev[[2]],"Marg")
+    MtrL
+  }
+  
+  LimpMtr<-function(Mtrx) {Mtrx[is.na(Mtrx)]<-""; Mtrx[Mtrx=="ns"]<-""; Mtrx}
+  
+  LimpMtr2 <- function(Mtrx) {Mtrx<- gsub("\\s", "", Mtrx); Mtrx[is.na(Mtrx)]<-""; Mtrx[Mtrx=="ns"]<-""; Mtrx[Mtrx=="NA"]<-""; Mtrx}
+  
+  CreateDT.Means3 <- function(Filep , ip='1',jp="across",kp='FS') {
+    DTCom=NA
+    DTCom <- Filep %>% filter(Day==jp,Context==kp,CellType==ip) %>% droplevels() %>% 
+      select(-c(Day:CellType,Context )) %>%
+      data.table() 
+    
+    DTCom2 <- DTCom %>%
+      .[, data.table(table(Subject,bmr)),] %>%
+      .[,Ntt:=sum(N),   by=(Subject)] %>% 
+      .[,Perc:=N/sum(N),by=(Subject)] %>%
+      .[,BMROrder:=paste0("C",rank(-Perc, ties.method= "first")),by=.(Subject)] %>%
+      data.table() %>%
+      setkey(., Subject) %>%
+      filter(BMROrder %in% c("C1","C2")) %>% droplevels() %>% 
+      mutate_at(c("BMROrder","bmr"), factor) %>%
+      data.table() %>%
+      .[,Inter:=interaction(BMROrder,bmr,lex.order = T)] %>% setkey(.,Inter) %>% 
+      mutate(Inter=factor(Inter,)) %>% data.table()%>%
+      .[,Condition:=paste(Inter,collapse = "_"), by=.(Subject)] %>%  
+      mutate(Condition=factor(Condition,levels=LosLevLim)) %>%
+      data.table() 
+    
+    DTAnimalFus=data.table(left_join(DTCom2,DTCom[,.(Subject,animal)], by="Subject",multiple="first"))
+    
+    # Overall estimates
+    DTComAll <- DTAnimalFus %>%
+      .[, data.table(table(Condition,animal)),] %>%
+      .[,Ntt:=sum(N), by=.(animal)] %>%
+      .[,Perc:=N/Ntt] %>%
+      data.table()
+    
+    
+    pWilcox <-c(do.call("rbind",lapply(1:12, function(ll) wilcox.test(DTComAll[Condition==LosLevLim[[ll]]]$Perc,
+                                                                      mu = 1/12, alternative = "greater")$p.value)))
+    Individual.a=data.table(Condition=LosLevLim , pWilcox)
+    
+    
+    Fus2=full_join(DTComAll[,.(Mean=mean(Perc)), by =.(Condition)],Individual.a,by= "Condition")
+    
+    Resf<-as.data.table(Fus2) %>%
+      .[,pw.Sig:= InterP2(pWilcox)] %>% 
+      data.table()
+    
+    # Marginal estimations
+    DTCom3aa = DTAnimalFus %>% filter(BMROrder %in% c("C1")) %>% droplevels() %>% 
+      mutate_at(c("BMROrder","bmr"), factor) %>% data.table() %>%
+      .[,data.table(table(bmr, animal))] %>%
+      mutate(bmr=factor(bmr)) %>% as.data.table() %>%
+      .[,Ntt:=sum(N), by=.(animal)] %>%
+      .[,Perc:=N/Ntt] %>%
+      data.table()
+    
+    DTCom3bb = DTAnimalFus %>% filter(BMROrder %in% c("C2")) %>% droplevels() %>% 
+      mutate_at(c("BMROrder","bmr"), factor) %>% data.table() %>%
+      .[,data.table(table(bmr, animal))] %>%
+      mutate(bmr=factor(bmr)) %>% as.data.table() %>%
+      .[,Ntt:=sum(N), by=.(animal)] %>%
+      .[,Perc:=N/Ntt] %>%
+      data.table()
+    
+    
+    Individual.aaa <- Individual.bbb <-NA
+    
+    pWilcox.aaa <- c(do.call("rbind",lapply(1:4, function(ll) wilcox.test(DTCom3aa[bmr==levels(bmr)[[ll]]]$Perc,
+                                                                          mu = 1/4, alternative = "greater")$p.value)))
+    Individual.aaa=data.table(bmr=levels(DTCom3aa$bmr), pWilcox=pWilcox.aaa)
+    Individual.aaa=full_join(DTCom3aa[,.(Mean=mean(Perc)), by =.(bmr)],Individual.aaa,by= "bmr")
+    
+    pWilcox.bbb <- c(do.call("rbind",lapply(1:4, function(ll) wilcox.test(DTCom3bb[bmr==levels(bmr)[[ll]]]$Perc,
+                                                                          mu = 1/4, alternative = "greater")$p.value)))
+    Individual.bbb=data.table(bmr=levels(DTCom3bb$bmr), pWilcox=pWilcox.bbb)
+    Individual.bbb=full_join(DTCom3bb[,.(Mean=mean(Perc)), by =.(bmr)],Individual.bbb,by= "bmr")
+    
+    Individual.aaa=cbind(Condition="C1",Individual.aaa)
+    Individual.bbb=cbind(Condition="C2",Individual.bbb)
+    
+    Fus111=rbind(Individual.aaa, Individual.bbb)
+    
+    Resf2<- as.data.table(Fus111) %>%
+      .[,pw.Sig:= InterP2(pWilcox)] %>% 
+      data.table()
+    
+    Resfinal <-list(
+      MedGlobal <- Resf,
+      MedMargC1 <-as.data.table(Resf2[Condition=="C1"]),
+      MedMargC2 <-as.data.table(Resf2[Condition=="C2"])
+    )
+    
+    Resfinal
+  }
