@@ -710,3 +710,106 @@
     
     Resfinal
   }
+  
+  RobSis24 <- function(DTFisp,IdSj="Subject",wv1="Context",wv2="Day",LaVd="Rate") {
+    RsAOV<-list()
+    RsAOVOmn<-NA; RsAOVOmn2<-NA;
+    #RobAOvAPA.1<-NA; 
+    DTFisDif<-NA; DTp2<-NA
+    DTp2 <- DTFisp %>% 
+      dplyr::rename(IdSuj=all_of(IdSj)) %>% 
+      dplyr::rename(x1=all_of(wv1)) %>% 
+      dplyr::rename(x2=all_of(wv2)) %>%
+      dplyr::rename(y=all_of(LaVd)) %>%
+      mutate(x1=factor(x1)) %>%
+      mutate(x2=factor(x2)) %>%
+      mutate(IdSuj=factor(IdSuj)) %>%
+      mutate(Inter:=factor(interaction(x1,x2))) %>%
+      data.table() %>%
+      setkey(.,Inter)
+    
+    NumL=length(levels(DTp2$Inter)); vector=c(1:NumL)
+    lv1=length(levels(DTp2$x1));lv2=length(levels(DTp2$x2))
+    
+    # Data structure for Wilcox functions
+    ArP=lapply(1:NumL, function (x) DTp2[.(levels(DTp2$Inter)[x]),"y",with=F][[1]])
+    
+    # A) Robust AOV with wwtrim vs bwtrimbt_vMM
+    try(RsAOVOmn<-bwtrim(lv2,lv1,ArP))
+    try(RsAOVOmn2<-bwtrimbt_vMM(lv2,lv1,ArP))
+    RobAOvTXT<-round(unlist(RsAOVOmn),4)
+    
+    # Effect Size 
+    DTFisDif <- DTp2 %>% 
+      group_by(IdSuj) %>% 
+      mutate(Difference = y[x1 == levels(x1)[1]] - y[x1 == levels(x1)[2]]) %>%
+      filter(.,x1 == levels(x1)[1]) %>%
+      dplyr::select(.,-x1) %>%
+      data.table()
+    
+    x1.Spl <- split(DTp2$y, DTp2$x1)
+    x1.Ef=yuendv2(x1.Spl[[1]],x1.Spl[[2]],pr=F)$Effect.Size
+    x1.Ef.b=rmES.pro(x1.Spl)$effect.size
+    # dep.ES.summary.CI(x[[1]],x[[2]])
+    x2.Spl<-split(DTp2$y, DTp2$x2)
+    x2.Ef= t1wayv2(x2.Spl)$Effect.Size
+    IntEff=mean(esImcp(lv2,lv1,ArP)$Effect.Sizes)
+    
+    # Prepare all statistics in an organized APA style: Omnibus AOV and Effect Sizes
+    RobAOvAPA.1<-paste0("[",wv1,": ", "FW(",lv1-1,") = ", 
+                        frmMM(RobAOvTXT[3],2), ", p = ", frmMM(RsAOVOmn2[[2]],4), ", ",
+                        "\U1D6CF = ", frmMM(x1.Ef,2), " (",InterpExplana(x1.Ef), " effect); ",
+                        wv2, ": ", "FW(",lv2-1,") = ",
+                        frmMM(RobAOvTXT[1],2), ", p = ", frmMM(RsAOVOmn2[[1]],4), ", ",
+                        "\U1D6CF = ", frmMM(x2.Ef,2), " (",InterpExplana(x2.Ef), " effect); ",
+                        "Interaction ",wv1, " x ", wv2,": ", "FW(",(lv1-1)*(lv2-1),") = ", 
+                        frmMM(RobAOvTXT[5],2), ", p = ", frmMM(RsAOVOmn2[[3]],4), ", ",
+                        "\U1D6CF = ", frmMM(IntEff,2), " (",InterpExplana(IntEff), " effect)",
+                        "]" )
+    
+    RsAOV$Omn<-RobAOvAPA.1
+    
+    # B) Simple effect (with yuenv2) and Rom vs BH Pos Hoc for Between,
+    # and with yuendv2 and Rom vs BH Pos Hoc for Within
+    # B.1) Direction Class (within) on each Day (Between)
+    cnt=0; yd<-list();LapAd<-NULL;LapAd2<-NULL
+    for (i2 in 1:lv2) {
+      LaP=NULL
+      for (i in (1:(lv1-1))) {
+        for (j in ((i+1):(lv1))) {
+          cnt=cnt+1
+          sample1<-DTp2[x2==levels(DTp2$x2)[i2]&x1==levels(DTp2$x1)[i],y] 
+          sample2<-DTp2[x2==levels(DTp2$x2)[i2]&x1==levels(DTp2$x1)[j],y] 
+          out=c(unlist(yuendv2(sample1,sample2)))
+          yd[[cnt]]<-as.data.table(rbind(out))
+          LaP=c(LaP,yd[[cnt]]$p.value)
+          yd[[cnt]]<-data.table(cbind(IV1=levels(DTp2$x2)[i2],IV2.a=levels(DTp2$x1)[i],
+                                      IV2.b=levels(DTp2$x1)[j],yd[[cnt]]))
+        }
+      }
+      LapAd2<-c(LapAd2,p.adjust(LaP, "BH")) # Optimo
+      if (length(LaP)==1) LapAd<-c(LapAd,(LaP))
+      if (length(LaP)>1) LapAd<-c(LapAd,adjustRom(LaP))
+    }
+    
+    ext1<-ExtrSig(LapAd); names(ext1)<-c("p.Rom","Sig.Rom")
+    ext2<-ExtrSig(LapAd2); names(ext2)<-c("p.BH","Sig.BH")
+    ResPosRob<-data.table(do.call("rbind", yd),ext1,ext2)
+    ResPosRob$p.value=frmMM( ResPosRob$p.value,4)
+    for (i in (c(4,5,7:11,14)))ResPosRob[[i]]<-as.numeric(frmMM(ResPosRob[[i]],2))
+    ResPosRob<-data.table(ResPosRob, Tam= unlist(lapply(ResPosRob$Effect.Size, InterpExplana)))
+    setorder(ResPosRob, -Sig.BH)
+    
+    ResAPA<-lapply(1:nrow(ResPosRob), function(i) with (ResPosRob[i,], paste0(IV1,": ",IV2.a," - ",IV2.b," = ",dif,": ","tw(",df,") = ",
+                                                                              teststat, "; pROM = ", p.Rom, "; \U1D6CF =",
+                                                                              Effect.Size, " (",Tam," effect)")))
+    ResAPA2<-data.table(do.call("rbind",ResAPA))
+    
+    RsAOV$SimplEfa.1<- ResPosRob
+    RsAOV$SimplEfa.2<- ResAPA2
+    
+    RsAOV$Dif<-DTFisDif[,c(1,2,5)]
+    
+    RsAOV
+    
+  }
