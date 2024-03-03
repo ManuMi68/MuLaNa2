@@ -14,6 +14,8 @@ The code is organized in an html file that includes all the explanations and det
 Alternatively the code is also included in the RStudio file:
 "NeuralSpatial.Rmd".
 
+NeuralSpatial.html file is designed as a tutorial with instructions and explanations of the data, analysis commands, figure generation, descriptive statistics (including Effect Size) to facilitate potential future meta-analyses or power estimations.
+
 The complete code is included for the analysis of all the data of the paper
 "Distinct neural mechanisms for heading retrieval and context recognition in the hippocampus during spatial reorientation".
 The code can be copied from the different chunks, organized from the Figures on the paper.
