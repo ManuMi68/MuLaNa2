@@ -713,7 +713,7 @@
   
   RobSis24 <- function(DTFisp,IdSj="Subject",wv1="Context",wv2="Day",LaVd="Rate") {
     RsAOV<-list()
-    RsAOVOmn<-NA; RsAOVOmn2<-NA;
+    RsAOVOmn<-NA; RsAOVOmn2<-NULL;
     #RobAOvAPA.1<-NA; 
     DTFisDif<-NA; DTp2<-NA
     DTp2 <- DTFisp %>% 
@@ -738,10 +738,11 @@
     try(RsAOVOmn<-bwtrim(lv2,lv1,ArP))
     try(RsAOVOmn2<-bwtrimbt_vMM(lv2,lv1,ArP))
     RobAOvTXT<-round(unlist(RsAOVOmn),4)
+    if(is.null(RsAOVOmn2)) RsAOVOmn2<-RsAOVOmn
     
     # Effect Size 
     DTFisDif <- DTp2 %>% 
-      group_by(IdSuj) %>% 
+      group_by(IdSuj,x2) %>% 
       mutate(Difference = y[x1 == levels(x1)[1]] - y[x1 == levels(x1)[2]]) %>%
       filter(.,x1 == levels(x1)[1]) %>%
       dplyr::select(.,-x1) %>%
@@ -808,7 +809,7 @@
     RsAOV$SimplEfa.1<- ResPosRob
     RsAOV$SimplEfa.2<- ResAPA2
     
-    RsAOV$Dif<-DTFisDif[,c(1,2,5)]
+    RsAOV$Dif<-DTFisDif[,-"y"]
     
     RsAOV
     
