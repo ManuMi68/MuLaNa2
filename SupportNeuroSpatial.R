@@ -5,11 +5,11 @@
  # context recognition in the hippocampus during spatial reorientation"
 # author: "Manuel Miguel Ramos Álvarez and the Muzzio Lab"
 
-  source("https://github.com/ManuMi68/StatMmRa/raw/main/RMmRaGen24.txt")
+  source("https://github.com/ManuMi68/StatMmRa/raw/main/RMmRaGen24.R")
   source("https://github.com/ManuMi68/MuLaNa2/raw/main/Rallfun-v40vMM.txt")
   
   
-  # Function chkPkg() is located in RMmRaGen.R
+  # Function chkPkg() is located in RMmRaGe24n.R
   chkPkg(c("data.table", "dplyr", "tidyr","tibble", "parallel", "foreach",
            "ggplot2","add2ggplot","introdataviz", "cowplot", "ggridges", "ggcorrplot",
            "ez","afex", "emmeans", "effectsize","scmamp",
@@ -23,9 +23,30 @@
   
   # Load all data
   load(gzcon(url("https://github.com/ManuMi68/MuLaNa2/raw/main/NeuroSpatialData/NeuroSpatial.RData")))
+    # BehavTwoContext.RDS
+    # CalciumNormal.RDS
+    # CalcTetrodePairwiseCorr.RDS
+    # DigBehavioralData.RDS
+    # DigBehavioralDataForBF.RDS
+    # SpatialInformationContent.RDS
+    # Tetrodes.RDS
+    # CalciumStabilityPerCell.RDS
+    # DistributionsPopulationData.RDS
+    # CalMinCorr.RDS
+    # CalminCorrDetail.RDS
+    # RateRemap.RDS
+    # RateRemapMean_0_5.RDS
+    # RateRemapMean_0_6.RDS
+    # RateRemapMean_0_7.RDS
+    # RateRemapPeak_0_5.RDS
+    # RateRemapPeak_0_6.RDS
+    # RateRemapPeak_0_7.RDS
+    # RateRemapCellType.RDS
+    # CalciumCellRegsScores.RDS
+    # CellRegsCountBetweenDays.RDS
+    # HeadingAndContextPrediction.RDS
   
   # Color schemes for the 4 tasks
-  # Tarea 1 (código 2 "Elevated Cliff")
   TskCol1<-c("green3","green4")
   TskCol2<-c("red","orange")
   TskCol3<-c("blue","dodgerblue")
@@ -34,7 +55,7 @@
   TskCol1b<-c("red","orange","brown")
   
   
-  # More specific functions, perhaps I will include them in RMMRA
+  # More specific functions
   #define function to catch integer(0)
   integer0_test <- function(data) {
     if(identical(data, integer(0))) {
@@ -77,9 +98,9 @@
     pp1bSum= summary(pp1b)
     initEs=grep("estimate",names(data.table(pp1Sum)))-1
     
-    # He sustituido pHolm por pRom
-    # pp1.MM[1,pRom]
-    # pp1Sum[1,"p.value"]
+    # Replaced pHolm with pRom
+      # pp1.MM[1,pRom]
+      # pp1Sum[1,"p.value"]
     ResAPA2<-list();#CtrEl=1
     for (CtrEl in 1:nrow(pp1Sum)) {
       ResAPA2[CtrEl]<- paste0(pp1Sum[CtrEl,1],": ",
@@ -404,12 +425,13 @@
                                paste0(i, ".", j)
                              })
     
-    # Resecdf[[2]]<-  unlist(lapply(1:lv1, function (x) lapply(1:lv2, function (y) 
-    #  DTp[.(levels(DTp$Group)[x],levels(DTp$Day)[y],with=F),empirical_cdf(logBF, ubounds=ValsBF)])),
-    #  recursive = F)
-    # Resecdf[[3]]<-  unlist(lapply(1:lv1, function (x) lapply(1:lv2, function (y) 
-    #  DTp[.(levels(DTp$Group)[x],levels(DTp$Day)[y],with=F),empirical_cdf(logBF, ubounds=ValsBF2)])),
-    #  recursive = F)
+    # Alternative based on lapply, instead of foreach
+      # Resecdf[[2]]<-  unlist(lapply(1:lv1, function (x) lapply(1:lv2, function (y) 
+      #  DTp[.(levels(DTp$Group)[x],levels(DTp$Day)[y],with=F),empirical_cdf(logBF, ubounds=ValsBF)])),
+      #  recursive = F)
+      # Resecdf[[3]]<-  unlist(lapply(1:lv1, function (x) lapply(1:lv2, function (y) 
+      #  DTp[.(levels(DTp$Group)[x],levels(DTp$Day)[y],with=F),empirical_cdf(logBF, ubounds=ValsBF2)])),
+      #  recursive = F)
     Resecdf[[2]] <-foreach(i=1:lv1,.combine='cbind') %:%
       foreach(j=1:lv2, .combine='cbind') %dopar% {
         sapply (DTp[.(levels(DTp$Group)[i],levels(DTp$Day)[j],with=F),
@@ -553,28 +575,6 @@
     Res
   }
   
-  stats_MM <- function(x) {
-    nadt <-0
-    summ<-summary(x)
-    if (length(summ)>6) nadt= summ[[7]]
-    n = length(x)-nadt
-    min <- frmMM(min(x, na.rm = TRUE),2)
-    max <- frmMM(max(x, na.rm = TRUE),2)
-    mean <- frmMM(mean(x, na.rm = TRUE),2)
-    med <- frmMM(median(x, na.rm = TRUE))
-    trimm = frmMM(mean(x, na.rm = TRUE,trim=.2),2)
-    Q1 <- frmMM(summ[[2]],2)
-    Q3 <- frmMM(summ[[5]],2)
-    Iqr <- frmMM(summ[[5]]-summ[[2]],2)
-    sd <- frmMM(sd(x, na.rm =TRUE),2)
-    se <- frmMM(sd(x, na.rm =TRUE)/sqrt(n),2)
-    mad <- frmMM(mad(x, na.rm = TRUE),2)
-    summary <- data.table(n=n, 'NAs' = nadt, Min = min, '1st Qu'=Q1, 
-                          Median=med, Mean = mean, 'Trimmed(20%)' = trimm,
-                          '3rd Qu'=Q3, Max = max, 
-                          SD = sd, SEM = se, IQR = Iqr, MAD = mad)
-    summary
-  }
   
   ResCtrl1p <- function(DTp, DTRes, a0, PosH.4w) {
     # Results
@@ -759,13 +759,13 @@
     # Prepare all statistics in an organized APA style: Omnibus AOV and Effect Sizes
     RobAOvAPA.1<-paste0("[",wv1,": ", "FW(",lv1-1,") = ", 
                         frmMM(RobAOvTXT[3],2), ", p = ", frmMM(RsAOVOmn2[[2]],4), ", ",
-                        "\U1D6CF = ", frmMM(x1.Ef,2), " (",InterpExplana(x1.Ef), " effect); ",
+                        greek$xi," = ", frmMM(x1.Ef,2), " (",InterpExplana(x1.Ef), " effect); ",
                         wv2, ": ", "FW(",lv2-1,") = ",
                         frmMM(RobAOvTXT[1],2), ", p = ", frmMM(RsAOVOmn2[[1]],4), ", ",
-                        "\U1D6CF = ", frmMM(x2.Ef,2), " (",InterpExplana(x2.Ef), " effect); ",
+                        greek$xi," = ", frmMM(x2.Ef,2), " (",InterpExplana(x2.Ef), " effect); ",
                         "Interaction ",wv1, " x ", wv2,": ", "FW(",(lv1-1)*(lv2-1),") = ", 
                         frmMM(RobAOvTXT[5],2), ", p = ", frmMM(RsAOVOmn2[[3]],4), ", ",
-                        "\U1D6CF = ", frmMM(IntEff,2), " (",InterpExplana(IntEff), " effect)",
+                        greek$xi," = ", frmMM(IntEff,2), " (",InterpExplana(IntEff), " effect)",
                         "]" )
     
     RsAOV$Omn<-RobAOvAPA.1
@@ -802,12 +802,55 @@
     setorder(ResPosRob, -Sig.BH)
     
     ResAPA<-lapply(1:nrow(ResPosRob), function(i) with (ResPosRob[i,], paste0(IV1,": ",IV2.a," - ",IV2.b," = ",dif,": ","tw(",df,") = ",
-                                                                              teststat, "; pROM = ", p.Rom, "; \U1D6CF =",
+                                                                              teststat, "; pROM = ", p.Rom, "; ", greek$xi," = ",
                                                                               Effect.Size, " (",Tam," effect)")))
     ResAPA2<-data.table(do.call("rbind",ResAPA))
     
     RsAOV$SimplEfa.1<- ResPosRob
     RsAOV$SimplEfa.2<- ResAPA2
+    
+    # B.2) Direction Day (Between) on each Class (within)
+    cnt=0; yd<-list();LapAd<-NULL;LapAd2<-NULL
+    for (i2 in 1:lv1) {
+      LaP=NULL
+      for (i in (1:(lv2-1))) {
+        for (j in ((i+1):(lv2))) {
+          cnt=cnt+1
+          sample1<-DTp2[x2==levels(DTp2$x2)[i]&x1==levels(DTp2$x1)[i2],y] 
+          sample2<-DTp2[x2==levels(DTp2$x2)[j]&x1==levels(DTp2$x1)[i2],y]
+          out=c(unlist(yuenv2(sample1,sample2)))
+          yd[[cnt]]<-as.data.table(rbind(out))
+          LaP=c(LaP,yd[[cnt]]$p.value)
+          yd[[cnt]]<-data.table(cbind(IV1=levels(DTp2$x1)[i2],
+                                      IV2.a=levels(DTp2$x2)[i],IV2.b=levels(DTp2$x2)[j],yd[[cnt]]))
+          
+        }
+      }
+      #LapAd<-c(LapAd,p.adjust(LaP, "holm"))
+      LapAd2<-c(LapAd2,p.adjust(LaP, "BH")) # Optimo
+      if (length(LaP)==1) LapAd<-c(LapAd,(LaP))
+      if (length(LaP)>1) LapAd<-c(LapAd,adjustRom(LaP))
+    }
+    
+    ext1<-ExtrSig(LapAd); names(ext1)<-c("p.Rom","Sig.Rom")
+    ext2<-ExtrSig(LapAd2); names(ext2)<-c("p.BH","Sig.BH")
+    ResPosRob2<-data.table(do.call("rbind", yd),ext1,ext2)
+    ResPosRob2$p.value=frmMM( ResPosRob2$p.value,4)
+    for (i in (c(4,5,9:15)))ResPosRob2[[i]]<-as.numeric(frmMM(ResPosRob2[[i]],2))
+    ResPosRob2<-data.table(ResPosRob2, Tam= unlist(lapply(ResPosRob2$Effect.Size, InterpExplana)))  
+    
+    setorder(ResPosRob2, -Sig.BH)
+    #with (ResPosRob[1,], paste0(IV1,": ",IV2.a," - ",IV2.b," = ",dif,": ","tw(",df,") = ",
+    #                               teststat, "; p = ", p.V1, "; \U1D6CF =",
+    #                               Effect.Size, " (",Tam," effect)"))
+    
+    ResAPAb<-lapply(1:nrow(ResPosRob2), function(i) with (ResPosRob2[i,], paste0(IV1,": ",IV2.a," - ",IV2.b," = ",dif,": ","tw(",df,") = ",
+                                                                                 teststat, "; pROM = ", p.Rom,"; pBH = ", p.BH,  "; ", greek$xi," = ",
+                                                                                 Effect.Size, " (",Tam," effect)")))
+    ResAPA2b<-data.table(do.call("rbind",ResAPAb))
+    
+    RsAOV$SimplEfb.1<- ResPosRob2
+    RsAOV$SimplEfb.2<- ResAPA2b
     
     RsAOV$Dif<-DTFisDif[,-"y"]
     
