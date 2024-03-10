@@ -45,6 +45,7 @@
     # CalciumCellRegsScores.RDS
     # CellRegsCountBetweenDays.RDS
     # HeadingAndContextPrediction.RDS
+    # CalcTetrodePairwiseCorrRaw.RDS
   
   # Color schemes for the 4 tasks
   TskCol1<-c("green3","green4")
@@ -505,13 +506,17 @@
     write.csv2(Global.i,paste0(Nmpp," Global.csv"))
     zz<-file(paste0(Nmpp," Global.txt"),"w")
     sink(zz);
-    print(GlobalAPA.i);
-    cat("\n");
-    print(ecdf.i[[2]]);
-    cat("\n"); cat("\n");
-    print(ecdf.i[[3]]);
-    cat("\n");cat("\n");cat("\n");
-    print(Detall.i)
+      print(GlobalAPA.i);
+      cat("\n");
+      print(ecdf.i[[2]]);
+      cat("\n"); cat("\n");
+      print(ecdf.i[[3]]);
+      cat("\n");cat("\n");cat("\n");
+      for (ii in labels(Detall.i)) {
+        cat(paste0(ii,"\n"))
+        print(Detall.i[[ii]][1:(length(labels(Detall.i[[1]]))-1)])
+        cat("--------------------\n")
+      }
     sink(); close(zz)
     for (i in 1:length(levels(DTppp$Group))) {ggsave(paste0(Nmpp," CumDis_",levels(DTppp$Group)[i], ".pdf"),GrpDay.i[[1]][[i]])}
     for (i in 1:length(levels(DTppp$Day)))   {ggsave(paste0(Nmpp," CumDis_",levels(DTppp$Day)[i], ".pdf"),GrpGroup.i[[1]][[i]])}
@@ -552,13 +557,17 @@
     write.csv2(Global.i,paste0(Nmpp," Global.csv"))
     zz<-file(paste0(Nmpp," Global.txt"),"w")
     sink(zz);
-    print(GlobalAPA.i);
-    cat("\n");
-    print(ecdf.i[[2]]);
-    cat("\n"); cat("\n");
-    print(ecdf.i[[3]]);
-    cat("\n");cat("\n");cat("\n");
-    print(Detall.i)
+      print(GlobalAPA.i);
+      cat("\n");
+      print(ecdf.i[[2]]);
+      cat("\n"); cat("\n");
+      print(ecdf.i[[3]]);
+      cat("\n");cat("\n");cat("\n");
+      for (ii in labels(Detall.i)) {
+        cat(paste0(ii,"\n"))
+        print(Detall.i[[ii]][1:(length(labels(Detall.i[[1]]))-1)])
+        cat("--------------------\n")
+      }
     sink(); close(zz)
     ggsave(paste0(Nmpp," CumDis_SessByCxt.pdf"),GrpDay.i)
     ggsave(paste0(Nmpp," CumDis_All.pdf"),GrpJn.i,width = 20,height = 14)
