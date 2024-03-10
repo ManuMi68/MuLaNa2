@@ -316,7 +316,7 @@
     
     DTp<-DTp[Group==Gs&Day==Ds]
     Global  <- Productorio(DTp$BF)
-    ResBFg1 <- DTp$logBF
+    ResBFg1 <- DTp$logBF; names(ResBFg1) <- DTp$Subject
     P <- ecdf(DTp$logBF)
     
     if (logEs10) {          
@@ -332,11 +332,16 @@
     if (wG&!wS) laEtiq=Gs
     if (!wG&wS) laEtiq=Ds
     
+    Res1=DTp$BF; 
+    Res2=InterpBF(DTp$BF);
+    Res3=DTp$logBF
+    names(Res1) <- names(Res2) <- names(Res3) <- DTp$Subject
+    
     BFAc <-list(
-      BF =       DTp$BF,
-      InterBF =  InterpBF(DTp$BF),
-      LogBF =    DTp$logBF,	
-      DT =       data.table(Group=rep(laEtiq,length(ResBFg1)),BF=ResBFg1),
+      BF =       Res1,
+      InterBF =  Res2,
+      LogBF =    Res3,	
+      DT =       data.table(Subject=DTp$Subject,Group=rep(laEtiq,length(ResBFg1)),BF=ResBFg1),
       Pecdf =    P,
       empcdf =   empirical_cdf(ResBFg1, ubounds=ValsBF),
       empcdf2 =  empirical_cdf(ResBFg1, ubounds=ValsBF2),
@@ -355,7 +360,7 @@
     
     DTp<-DTp[Day==Ds]
     Global  <- Productorio(DTp$BF)
-    ResBFg1 <- DTp$logBF
+    ResBFg1 <- DTp$logBF; names(ResBFg1) <- DTp$Subject
     P <- ecdf(DTp$logBF)
     
     if (logEs10) {          
@@ -369,11 +374,16 @@
     
     laEtiq=Ds
     
+    Res1=DTp$BF; 
+    Res2=InterpBF(DTp$BF);
+    Res3=DTp$logBF
+    names(Res1) <- names(Res2) <- names(Res3) <- DTp$Subject
+    
     BFAc <-list(
-      BF =       DTp$BF,
-      InterBF =  InterpBF(DTp$BF),
-      LogBF =    DTp$logBF,	
-      DT =       data.table(BF=ResBFg1),
+      BF =       Res1,
+      InterBF =  Res2,
+      LogBF =    Res3,	
+      DT =       data.table(Subject=DTp$Subject,BF=ResBFg1),
       Pecdf =    P,
       empcdf =   empirical_cdf(ResBFg1, ubounds=ValsBF),
       empcdf2 =  empirical_cdf(ResBFg1, ubounds=ValsBF2),
