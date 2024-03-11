@@ -33,7 +33,7 @@ that corresponds to the version Rallfun-v40.txt with a few improvements
 Adapted functions include the suffix "_vMM"
 
 Authors.
-Manuel-Miguel Ramos-Álvarez (mramos@ujaen.es) - collaborator, Muzzio Lab -.
+Manuel-Miguel Ramos-Álvarez (mramos@ujaen.es) - collaborator, Isabel Muzzio Lab -.
 See also the list of contributors who participated in this project.
 
 License.
