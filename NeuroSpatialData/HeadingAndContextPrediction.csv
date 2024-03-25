@@ -1,85 +1,85 @@
-"";"Subject";"Accuracy";"CellType";"Context";"Day";"Inter"
-"1";"AK42_CA1";0,555555556;"FI Cells";"Context Prediction";"Day 1";"FI Cells.Day 1"
-"2";"AK74_CA1";0,6;"FI Cells";"Context Prediction";"Day 1";"FI Cells.Day 1"
-"3";"CMG159_recut";0,5;"FI Cells";"Context Prediction";"Day 1";"FI Cells.Day 1"
-"4";"HGY1_recut";0,428571429;"FI Cells";"Context Prediction";"Day 1";"FI Cells.Day 1"
-"5";"JJ9_CA1";0,6;"FI Cells";"Context Prediction";"Day 1";"FI Cells.Day 1"
-"6";"K1_CA1";0,75;"FI Cells";"Context Prediction";"Day 1";"FI Cells.Day 1"
-"7";"MG1";0,555555556;"FI Cells";"Context Prediction";"Day 1";"FI Cells.Day 1"
-"8";"AK42_CA1";0,571428571;"FI Cells";"Context Prediction";"Day 2";"FI Cells.Day 2"
-"9";"AK74_CA1";0,714285714;"FI Cells";"Context Prediction";"Day 2";"FI Cells.Day 2"
-"10";"CMG159_recut";0,875;"FI Cells";"Context Prediction";"Day 2";"FI Cells.Day 2"
-"11";"HGY1_recut";NA;"FI Cells";"Context Prediction";"Day 2";"FI Cells.Day 2"
-"12";"JJ9_CA1";0,625;"FI Cells";"Context Prediction";"Day 2";"FI Cells.Day 2"
-"13";"K1_CA1";0,5;"FI Cells";"Context Prediction";"Day 2";"FI Cells.Day 2"
-"14";"MG1";0,545454545;"FI Cells";"Context Prediction";"Day 2";"FI Cells.Day 2"
-"15";"AK42_CA1";0,75;"FI Cells";"Context Prediction";"Day 3";"FI Cells.Day 3"
-"16";"AK74_CA1";0,75;"FI Cells";"Context Prediction";"Day 3";"FI Cells.Day 3"
-"17";"CMG159_recut";0,875;"FI Cells";"Context Prediction";"Day 3";"FI Cells.Day 3"
-"18";"HGY1_recut";NA;"FI Cells";"Context Prediction";"Day 3";"FI Cells.Day 3"
-"19";"JJ9_CA1";0,909090909;"FI Cells";"Context Prediction";"Day 3";"FI Cells.Day 3"
-"20";"K1_CA1";0,625;"FI Cells";"Context Prediction";"Day 3";"FI Cells.Day 3"
-"21";"MG1";0,636363636;"FI Cells";"Context Prediction";"Day 3";"FI Cells.Day 3"
-"22";"AK42_CA1";NA;"FS Cells";"Context Prediction";"Day 1";"FS Cells.Day 1"
-"23";"AK74_CA1";0,6;"FS Cells";"Context Prediction";"Day 1";"FS Cells.Day 1"
-"24";"CMG159_recut";0,666666667;"FS Cells";"Context Prediction";"Day 1";"FS Cells.Day 1"
-"25";"HGY1_recut";0,571428571;"FS Cells";"Context Prediction";"Day 1";"FS Cells.Day 1"
-"26";"JJ9_CA1";NA;"FS Cells";"Context Prediction";"Day 1";"FS Cells.Day 1"
-"27";"K1_CA1";NA;"FS Cells";"Context Prediction";"Day 1";"FS Cells.Day 1"
-"28";"MG1";0,555555556;"FS Cells";"Context Prediction";"Day 1";"FS Cells.Day 1"
-"29";"AK42_CA1";NA;"FS Cells";"Context Prediction";"Day 2";"FS Cells.Day 2"
-"30";"AK74_CA1";0,625;"FS Cells";"Context Prediction";"Day 2";"FS Cells.Day 2"
-"31";"CMG159_recut";1;"FS Cells";"Context Prediction";"Day 2";"FS Cells.Day 2"
-"32";"HGY1_recut";NA;"FS Cells";"Context Prediction";"Day 2";"FS Cells.Day 2"
-"33";"JJ9_CA1";NA;"FS Cells";"Context Prediction";"Day 2";"FS Cells.Day 2"
-"34";"K1_CA1";NA;"FS Cells";"Context Prediction";"Day 2";"FS Cells.Day 2"
-"35";"MG1";0,6;"FS Cells";"Context Prediction";"Day 2";"FS Cells.Day 2"
-"36";"AK42_CA1";NA;"FS Cells";"Context Prediction";"Day 3";"FS Cells.Day 3"
-"37";"AK74_CA1";NA;"FS Cells";"Context Prediction";"Day 3";"FS Cells.Day 3"
-"38";"CMG159_recut";0,875;"FS Cells";"Context Prediction";"Day 3";"FS Cells.Day 3"
-"39";"HGY1_recut";NA;"FS Cells";"Context Prediction";"Day 3";"FS Cells.Day 3"
-"40";"JJ9_CA1";0,454545455;"FS Cells";"Context Prediction";"Day 3";"FS Cells.Day 3"
-"41";"K1_CA1";NA;"FS Cells";"Context Prediction";"Day 3";"FS Cells.Day 3"
-"42";"MG1";0,6;"FS Cells";"Context Prediction";"Day 3";"FS Cells.Day 3"
-"43";"AK42_CA1";0,555555556;"FI Cells";"Heading Prediction";"Day 1";"FI Cells.Day 1"
-"44";"AK74_CA1";0,3;"FI Cells";"Heading Prediction";"Day 1";"FI Cells.Day 1"
-"45";"CMG159_recut";0,666666667;"FI Cells";"Heading Prediction";"Day 1";"FI Cells.Day 1"
-"46";"HGY1_recut";0,714285714;"FI Cells";"Heading Prediction";"Day 1";"FI Cells.Day 1"
-"47";"JJ9_CA1";0,6;"FI Cells";"Heading Prediction";"Day 1";"FI Cells.Day 1"
-"48";"K1_CA1";0,75;"FI Cells";"Heading Prediction";"Day 1";"FI Cells.Day 1"
-"49";"MG1";0,666666667;"FI Cells";"Heading Prediction";"Day 1";"FI Cells.Day 1"
-"50";"AK42_CA1";0,714285714;"FI Cells";"Heading Prediction";"Day 2";"FI Cells.Day 2"
-"51";"AK74_CA1";0,714285714;"FI Cells";"Heading Prediction";"Day 2";"FI Cells.Day 2"
-"52";"CMG159_recut";0,75;"FI Cells";"Heading Prediction";"Day 2";"FI Cells.Day 2"
-"53";"HGY1_recut";NA;"FI Cells";"Heading Prediction";"Day 2";"FI Cells.Day 2"
-"54";"JJ9_CA1";1;"FI Cells";"Heading Prediction";"Day 2";"FI Cells.Day 2"
-"55";"K1_CA1";0,6;"FI Cells";"Heading Prediction";"Day 2";"FI Cells.Day 2"
-"56";"MG1";0,636363636;"FI Cells";"Heading Prediction";"Day 2";"FI Cells.Day 2"
-"57";"AK42_CA1";0,625;"FI Cells";"Heading Prediction";"Day 3";"FI Cells.Day 3"
-"58";"AK74_CA1";0,625;"FI Cells";"Heading Prediction";"Day 3";"FI Cells.Day 3"
-"59";"CMG159_recut";0,5;"FI Cells";"Heading Prediction";"Day 3";"FI Cells.Day 3"
-"60";"HGY1_recut";NA;"FI Cells";"Heading Prediction";"Day 3";"FI Cells.Day 3"
-"61";"JJ9_CA1";0,727272727;"FI Cells";"Heading Prediction";"Day 3";"FI Cells.Day 3"
-"62";"K1_CA1";0,875;"FI Cells";"Heading Prediction";"Day 3";"FI Cells.Day 3"
-"63";"MG1";0,636363636;"FI Cells";"Heading Prediction";"Day 3";"FI Cells.Day 3"
-"64";"AK42_CA1";NA;"FS Cells";"Heading Prediction";"Day 1";"FS Cells.Day 1"
-"65";"AK74_CA1";0,5;"FS Cells";"Heading Prediction";"Day 1";"FS Cells.Day 1"
-"66";"CMG159_recut";0,666666667;"FS Cells";"Heading Prediction";"Day 1";"FS Cells.Day 1"
-"67";"HGY1_recut";0,714285714;"FS Cells";"Heading Prediction";"Day 1";"FS Cells.Day 1"
-"68";"JJ9_CA1";NA;"FS Cells";"Heading Prediction";"Day 1";"FS Cells.Day 1"
-"69";"K1_CA1";NA;"FS Cells";"Heading Prediction";"Day 1";"FS Cells.Day 1"
-"70";"MG1";0,666666667;"FS Cells";"Heading Prediction";"Day 1";"FS Cells.Day 1"
-"71";"AK42_CA1";NA;"FS Cells";"Heading Prediction";"Day 2";"FS Cells.Day 2"
-"72";"AK74_CA1";0,75;"FS Cells";"Heading Prediction";"Day 2";"FS Cells.Day 2"
-"73";"CMG159_recut";0,75;"FS Cells";"Heading Prediction";"Day 2";"FS Cells.Day 2"
-"74";"HGY1_recut";NA;"FS Cells";"Heading Prediction";"Day 2";"FS Cells.Day 2"
-"75";"JJ9_CA1";NA;"FS Cells";"Heading Prediction";"Day 2";"FS Cells.Day 2"
-"76";"K1_CA1";NA;"FS Cells";"Heading Prediction";"Day 2";"FS Cells.Day 2"
-"77";"MG1";0,7;"FS Cells";"Heading Prediction";"Day 2";"FS Cells.Day 2"
-"78";"AK42_CA1";NA;"FS Cells";"Heading Prediction";"Day 3";"FS Cells.Day 3"
-"79";"AK74_CA1";NA;"FS Cells";"Heading Prediction";"Day 3";"FS Cells.Day 3"
-"80";"CMG159_recut";0,625;"FS Cells";"Heading Prediction";"Day 3";"FS Cells.Day 3"
-"81";"HGY1_recut";NA;"FS Cells";"Heading Prediction";"Day 3";"FS Cells.Day 3"
-"82";"JJ9_CA1";0,727272727;"FS Cells";"Heading Prediction";"Day 3";"FS Cells.Day 3"
-"83";"K1_CA1";NA;"FS Cells";"Heading Prediction";"Day 3";"FS Cells.Day 3"
-"84";"MG1";0,6;"FS Cells";"Heading Prediction";"Day 3";"FS Cells.Day 3"
+"";"Subject";"CellType";"PredictionType";"Day";"Accuracy"
+"1";"AK42_CA1";"FI Cells";"Context Prediction";"Day 1";0,555555556
+"2";"AK74_CA1";"FI Cells";"Context Prediction";"Day 1";0,6
+"3";"CMG159_recut";"FI Cells";"Context Prediction";"Day 1";0,5
+"4";"HGY1_recut";"FI Cells";"Context Prediction";"Day 1";0,428571429
+"5";"JJ9_CA1";"FI Cells";"Context Prediction";"Day 1";0,6
+"6";"K1_CA1";"FI Cells";"Context Prediction";"Day 1";0,75
+"7";"MG1";"FI Cells";"Context Prediction";"Day 1";0,555555556
+"8";"AK42_CA1";"FI Cells";"Context Prediction";"Day 2";0,571428571
+"9";"AK74_CA1";"FI Cells";"Context Prediction";"Day 2";0,714285714
+"10";"CMG159_recut";"FI Cells";"Context Prediction";"Day 2";0,875
+"11";"HGY1_recut";"FI Cells";"Context Prediction";"Day 2";NA
+"12";"JJ9_CA1";"FI Cells";"Context Prediction";"Day 2";0,625
+"13";"K1_CA1";"FI Cells";"Context Prediction";"Day 2";0,5
+"14";"MG1";"FI Cells";"Context Prediction";"Day 2";0,545454545
+"15";"AK42_CA1";"FI Cells";"Context Prediction";"Day 3";0,75
+"16";"AK74_CA1";"FI Cells";"Context Prediction";"Day 3";0,75
+"17";"CMG159_recut";"FI Cells";"Context Prediction";"Day 3";0,875
+"18";"HGY1_recut";"FI Cells";"Context Prediction";"Day 3";NA
+"19";"JJ9_CA1";"FI Cells";"Context Prediction";"Day 3";0,909090909
+"20";"K1_CA1";"FI Cells";"Context Prediction";"Day 3";0,625
+"21";"MG1";"FI Cells";"Context Prediction";"Day 3";0,636363636
+"22";"AK42_CA1";"FS Cells";"Context Prediction";"Day 1";NA
+"23";"AK74_CA1";"FS Cells";"Context Prediction";"Day 1";0,6
+"24";"CMG159_recut";"FS Cells";"Context Prediction";"Day 1";0,666666667
+"25";"HGY1_recut";"FS Cells";"Context Prediction";"Day 1";0,571428571
+"26";"JJ9_CA1";"FS Cells";"Context Prediction";"Day 1";NA
+"27";"K1_CA1";"FS Cells";"Context Prediction";"Day 1";NA
+"28";"MG1";"FS Cells";"Context Prediction";"Day 1";0,555555556
+"29";"AK42_CA1";"FS Cells";"Context Prediction";"Day 2";NA
+"30";"AK74_CA1";"FS Cells";"Context Prediction";"Day 2";0,625
+"31";"CMG159_recut";"FS Cells";"Context Prediction";"Day 2";1
+"32";"HGY1_recut";"FS Cells";"Context Prediction";"Day 2";NA
+"33";"JJ9_CA1";"FS Cells";"Context Prediction";"Day 2";NA
+"34";"K1_CA1";"FS Cells";"Context Prediction";"Day 2";NA
+"35";"MG1";"FS Cells";"Context Prediction";"Day 2";0,6
+"36";"AK42_CA1";"FS Cells";"Context Prediction";"Day 3";NA
+"37";"AK74_CA1";"FS Cells";"Context Prediction";"Day 3";NA
+"38";"CMG159_recut";"FS Cells";"Context Prediction";"Day 3";0,875
+"39";"HGY1_recut";"FS Cells";"Context Prediction";"Day 3";NA
+"40";"JJ9_CA1";"FS Cells";"Context Prediction";"Day 3";0,454545455
+"41";"K1_CA1";"FS Cells";"Context Prediction";"Day 3";NA
+"42";"MG1";"FS Cells";"Context Prediction";"Day 3";0,6
+"43";"AK42_CA1";"FI Cells";"Heading Prediction";"Day 1";0,555555556
+"44";"AK74_CA1";"FI Cells";"Heading Prediction";"Day 1";0,3
+"45";"CMG159_recut";"FI Cells";"Heading Prediction";"Day 1";0,666666667
+"46";"HGY1_recut";"FI Cells";"Heading Prediction";"Day 1";0,714285714
+"47";"JJ9_CA1";"FI Cells";"Heading Prediction";"Day 1";0,6
+"48";"K1_CA1";"FI Cells";"Heading Prediction";"Day 1";0,75
+"49";"MG1";"FI Cells";"Heading Prediction";"Day 1";0,666666667
+"50";"AK42_CA1";"FI Cells";"Heading Prediction";"Day 2";0,714285714
+"51";"AK74_CA1";"FI Cells";"Heading Prediction";"Day 2";0,714285714
+"52";"CMG159_recut";"FI Cells";"Heading Prediction";"Day 2";0,75
+"53";"HGY1_recut";"FI Cells";"Heading Prediction";"Day 2";NA
+"54";"JJ9_CA1";"FI Cells";"Heading Prediction";"Day 2";1
+"55";"K1_CA1";"FI Cells";"Heading Prediction";"Day 2";0,6
+"56";"MG1";"FI Cells";"Heading Prediction";"Day 2";0,636363636
+"57";"AK42_CA1";"FI Cells";"Heading Prediction";"Day 3";0,625
+"58";"AK74_CA1";"FI Cells";"Heading Prediction";"Day 3";0,625
+"59";"CMG159_recut";"FI Cells";"Heading Prediction";"Day 3";0,5
+"60";"HGY1_recut";"FI Cells";"Heading Prediction";"Day 3";NA
+"61";"JJ9_CA1";"FI Cells";"Heading Prediction";"Day 3";0,727272727
+"62";"K1_CA1";"FI Cells";"Heading Prediction";"Day 3";0,875
+"63";"MG1";"FI Cells";"Heading Prediction";"Day 3";0,636363636
+"64";"AK42_CA1";"FS Cells";"Heading Prediction";"Day 1";NA
+"65";"AK74_CA1";"FS Cells";"Heading Prediction";"Day 1";0,5
+"66";"CMG159_recut";"FS Cells";"Heading Prediction";"Day 1";0,666666667
+"67";"HGY1_recut";"FS Cells";"Heading Prediction";"Day 1";0,714285714
+"68";"JJ9_CA1";"FS Cells";"Heading Prediction";"Day 1";NA
+"69";"K1_CA1";"FS Cells";"Heading Prediction";"Day 1";NA
+"70";"MG1";"FS Cells";"Heading Prediction";"Day 1";0,666666667
+"71";"AK42_CA1";"FS Cells";"Heading Prediction";"Day 2";NA
+"72";"AK74_CA1";"FS Cells";"Heading Prediction";"Day 2";0,75
+"73";"CMG159_recut";"FS Cells";"Heading Prediction";"Day 2";0,75
+"74";"HGY1_recut";"FS Cells";"Heading Prediction";"Day 2";NA
+"75";"JJ9_CA1";"FS Cells";"Heading Prediction";"Day 2";NA
+"76";"K1_CA1";"FS Cells";"Heading Prediction";"Day 2";NA
+"77";"MG1";"FS Cells";"Heading Prediction";"Day 2";0,7
+"78";"AK42_CA1";"FS Cells";"Heading Prediction";"Day 3";NA
+"79";"AK74_CA1";"FS Cells";"Heading Prediction";"Day 3";NA
+"80";"CMG159_recut";"FS Cells";"Heading Prediction";"Day 3";0,625
+"81";"HGY1_recut";"FS Cells";"Heading Prediction";"Day 3";NA
+"82";"JJ9_CA1";"FS Cells";"Heading Prediction";"Day 3";0,727272727
+"83";"K1_CA1";"FS Cells";"Heading Prediction";"Day 3";NA
+"84";"MG1";"FS Cells";"Heading Prediction";"Day 3";0,6
