@@ -1,0 +1,16 @@
+"";"Subject";"Day";"Accuracy"
+"1";"CMG129_CA1";"Day 1.Day 2";0,8
+"2";"CMG154_CA1";"Day 1.Day 2";0,428571429
+"3";"CMG161_CA1";"Day 1.Day 2";0,6
+"4";"CMG162_CA1";"Day 1.Day 2";0,625
+"5";"CMG169_CA1";"Day 1.Day 2";0,666666667
+"6";"CMG129_CA1";"Day 1.Day 3";0,75
+"7";"CMG154_CA1";"Day 1.Day 3";0,6
+"8";"CMG161_CA1";"Day 1.Day 3";0,428571429
+"9";"CMG162_CA1";"Day 1.Day 3";0,8
+"10";"CMG169_CA1";"Day 1.Day 3";1
+"11";"CMG129_CA1";"Day 2.Day 3";0,75
+"12";"CMG154_CA1";"Day 2.Day 3";0,6
+"13";"CMG161_CA1";"Day 2.Day 3";0,714285714
+"14";"CMG162_CA1";"Day 2.Day 3";0,8
+"15";"CMG169_CA1";"Day 2.Day 3";1
